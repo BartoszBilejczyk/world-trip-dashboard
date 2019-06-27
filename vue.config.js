@@ -4,9 +4,9 @@ module.exports = {
     loaderOptions: {
       sass: {
         data: `
-          @import "@/styles/partials/_mixins.scss";
-          @import "@/styles/partials/_variables.scss";
-          @import "@/styles/partials/_z-index.scss";
+          @import "@/styles/globals/_mixins.scss";
+          @import "@/styles/globals/_variables.scss";
+          @import "@/styles/globals/_z-index.scss";
         `
       }
     }
