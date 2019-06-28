@@ -1,0 +1,103 @@
+$gutter: 15px;
+$gutter2x: 2 * $gutter;
+
+.container {
+  max-width: $min-app-width;
+  width: 95%;
+  margin: 0 auto;
+
+  @media screen and (min-width: 1440px) {
+    // max-width larger to match design width
+    max-width: calc(#{$min-app-width} + 20px);
+    width: 85%;
+  }
+}
+
+.row {
+  width: 100%;
+  display: flex;
+
+  &:not(:last-of-type) {
+    margin-bottom: $ui-default-measure2x;
+  }
+}
+
+.row [class^="col"] {
+  margin: 0 $gutter;
+}
+
+.row [class^="col"]:first-of-type {
+  margin-left: 0;
+}
+
+.row [class^="col"]:last-of-type {
+  margin-right: 0;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.col-1 {
+  max-width: calc(100% / 12 - 15px);
+  min-width: calc((100% / 12) - #{$gutter2x});
+  flex: 1;
+}
+.col-2 {
+  max-width: calc(100% / 6 - 15px);
+  min-width: calc((100% / 6) - #{$gutter2x});
+  flex: 2;
+}
+.col-3 {
+  max-width: calc(100% / 4 - 15px);
+  min-width: calc((100% / 4) - #{$gutter2x});
+  flex: 3;
+}
+.col-4 {
+  max-width: calc(100% / 3 - 15px);
+  min-width: calc((100% / 3) - #{$gutter2x});
+  flex: 4;
+}
+.col-5 {
+  max-width: calc(100% / (12 / 5) - 15px);
+  min-width: calc((100% / (12 / 5)) - #{$gutter2x});
+  flex: 5;
+}
+.col-6 {
+  max-width: calc(100% / 2 - 15px);
+  min-width: calc((100% / 2) - #{$gutter2x});
+  flex: 6;
+}
+.col-7 {
+  max-width: calc(100% / (12 / 7) - 15px);
+  min-width: calc((100% / (12 / 7)) - #{$gutter2x});
+  flex: 7;
+}
+.col-8 {
+  max-width: calc(100% / (12 / 8) - 15px);
+  min-width: calc((100% / (12 / 8)) - #{$gutter2x});
+  flex: 8;
+}
+.col-9 {
+  max-width: calc(100% / (12 / 9) - 15px);
+  min-width: calc((100% / (12 / 9)) - #{$gutter2x});
+  flex: 9;
+}
+.col-10 {
+  max-width: calc(100% / (12 / 10) - 15px);
+  min-width: calc((100% / (12 / 10)) - #{$gutter2x});
+  flex: 10;
+}
+.col-11 {
+  max-width: calc(100% / (12 / 11) - 15px);
+  min-width: calc((100% / (12 / 11)) - #{$gutter2x});
+  flex: 11;
+}
+.col-12 {
+  max-width: 100%;
+  min-width: 100%;
+  flex: 12;
+}
+

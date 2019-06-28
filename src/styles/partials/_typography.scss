@@ -1,0 +1,89 @@
+@mixin setFontValues($font-size, $line-height) {
+  @include font($font-size);
+  line-height: $line-height;
+}
+
+.heading {
+  @include font-weight(400);
+  color: $text;
+
+  &--hero {
+    @include setFontValues(48, 77px);
+  }
+
+  &--primary {
+    @include setFontValues(40, 65px)
+  }
+
+  &--secondary {
+    @include setFontValues(33, 53px)
+  }
+
+  &--tertiary {
+    @include setFontValues(28, 45px)
+  }
+
+  &--section {
+    @include setFontValues(23, 38px)
+  }
+
+  &--subsection {
+    @include setFontValues(19, 27px)
+  }
+
+  &--color-white {
+    color: $white;
+  }
+
+  &--color-primary {
+    color: $primary;
+  }
+
+  &--color-light {
+    color: $text;
+  }
+
+  &--bold {
+    @include font-weight(700);
+  }
+
+  &--uppercase {
+    text-transform: uppercase;
+  }
+}
+
+.copy {
+  @include font(16, 400);
+  color: $text;
+  line-height: 26px;
+  margin: 0;
+
+  &--small {
+    @include font(14);
+    line-height: 19px;
+  }
+
+  &--color-white {
+    color: $white;
+  }
+
+  &--color-primary {
+    color: $primary;
+  }
+
+  &--color-light {
+    color: $text;
+  }
+
+  &--color-dark {
+    color: $text;
+  }
+
+  &--bold {
+    @include font-weight(700);
+  }
+
+  &--light {
+    @include font-weight(300);
+  }
+}
