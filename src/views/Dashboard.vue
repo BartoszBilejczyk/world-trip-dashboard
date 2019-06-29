@@ -1,41 +1,51 @@
 <template>
   <div class="dashboard">
-    <Navigation />
-    <div class="row">
-      <div class="col-5">
-        <div class="base-box">
-          <div v-for="country in countries">
-            {{ country.name }}
-            <button @click="remove(country.id)">remove</button>
-            <button @click="elo2(country)">update elo melo</button>
+    <div class="dashboard--main">
+      <div class="row">
+        <div class="col-5">
+          <div class="base-box">
+            <div 
+              v-for="country in countries"
+              :key="country.name"
+            >
+              {{ country.name }}
+              <button @click="remove(country.id)">remove</button>
+              <button @click="elo2(country)">update elo melo</button>
+            </div>
+            <button @click="elo">click to add France</button>
           </div>
-          <button @click="elo">click to add France</button>
+        </div>
+        <div class="col-7">
+          <div class="base-box">
+
+          </div>
         </div>
       </div>
-      <div class="col-7">
-        <div class="base-box">
-
+      <div class="row">
+        <div class="col-4">
+          <div class="base-box">
+            <div 
+              v-for="country in countries"
+              :key="country.name"
+            >
+              {{ country.name }}
+              <button @click="remove(country.id)">remove</button>
+            </div>
+            <button @click="elo">click to add France</button>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="base-box">
+            {{ countries[0] }}
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="base-box"></div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-4">
-        <div class="base-box">
-          <div v-for="country in countries">
-            {{ country.name }}
-            <button @click="remove(country.id)">remove</button>
-          </div>
-          <button @click="elo">click to add France</button>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="base-box">
-          {{ countries[0] }}
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="base-box"></div>
-      </div>
+    <div class="dashboard--side">
+      <Search />
     </div>
   </div>
 </template>
@@ -44,12 +54,12 @@
   import { db } from '@/db';
   import { GeoPoint } from '@/db';
   import { firestore } from 'firebase';
-  import Navigation from '@/components/Navigation'
+  import Search from '@/components/Search'
 
   export default {
     name: 'dashboard',
     components: {
-      Navigation
+      Search
     },
     data() {
       return {
@@ -101,12 +111,20 @@
 
 <style scoped lang="scss">
   .dashboard {
-    width: 100%;
     height: 100vh;
-    background:
-      linear-gradient( to right, transparent 0%, transparent 50%, $gray 50.01%, $gray 100% ),
-      linear-gradient( to bottom, white 0, $gray 80%, $gray 100% );
-    padding: 60px 120px 60px;
+    display: flex;
+
+    &--main {
+      padding: 60px 80px 60px;
+      background: $gray;
+      flex: 1;
+    }
+
+    &--side {
+      min-width: 450px;
+      box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.03);
+      z-index: 20;
+    }
 
     .row {
       height: calc((100vh - 200px) / 2);

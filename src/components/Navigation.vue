@@ -1,59 +1,26 @@
 <template>
   <div class="navigation">
-    <BaseSearch
-      :options="countriesNames"
-      @on-change="setCountry"
-    />
-    <BaseButton>Add new country</BaseButton>
+    <img src="@/assets/logo.png" alt="logo" class="logo">
   </div>
 </template>
 
 <script>
-  import { db } from '@/db';
-
-  import BaseSearch from '@/components/BaseSearch'
-  import BaseButton from '@/components/BaseButton'
-
   export default {
-    name: 'Navigation',
-    components: {
-      BaseSearch,
-      BaseButton
-    },
-    data() {
-      return {
-        countries: [],
-      }
-    },
-    computed: {
-      countriesNames() {
-        return this.countries.map(o => ({
-          label: o.name,
-          value: o.id
-        }));
-      }
-    },
-    firestore: {
-      countries: db.collection('countries')
-    },
-    methods: {
-      setCountry(country) {
-        console.log(country)
-        // set country in store
-      }
-    }
+    name: 'Drawer'
   }
 </script>
 
 <style scoped lang="scss">
+  .navigation {
+    width: 100px;
+    padding: 40px 0;
+    background: $primary;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.1);
+    z-index: 20;
+  }
+  
   .logo {
     max-width: 100px;
     height: auto;
-  }
-
-  .navigation {
-    display: flex;
-    justify-content: flex-end;
-
   }
 </style>
