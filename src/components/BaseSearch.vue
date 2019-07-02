@@ -1,7 +1,7 @@
 <template>
   <a-select
     style="width: 250px"
-    placeholder="Tags Mode"
+    placeholder="Choose Country"
     @change="$emit('on-change', $event)"
   >
     <a-select-option
