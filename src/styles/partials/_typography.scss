@@ -1,34 +1,39 @@
 @mixin setFontValues($font-size, $line-height) {
-  @include font($font-size);
+  @include font($font-size, 600);
   line-height: $line-height;
 }
 
 .heading {
-  @include font-weight(400);
   color: $text;
 
   &--hero {
     @include setFontValues(48, 77px);
+    margin: 15px 0;
   }
 
   &--primary {
-    @include setFontValues(40, 65px)
+    @include setFontValues(40, 65px);
+    margin: 12px 0;
   }
 
   &--secondary {
-    @include setFontValues(33, 53px)
+    @include setFontValues(33, 53px);
+    margin: 9px 0;
   }
 
   &--tertiary {
-    @include setFontValues(28, 45px)
+    @include setFontValues(28, 45px);
+    margin: 7px 0;
   }
 
   &--section {
-    @include setFontValues(23, 38px)
+    @include setFontValues(23, 38px);
+    margin: 5px 0;
   }
 
   &--subsection {
-    @include setFontValues(19, 27px)
+    @include setFontValues(19, 27px);
+    margin: 5px 0;
   }
 
   &--color-white {

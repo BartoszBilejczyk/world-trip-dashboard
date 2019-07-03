@@ -8,9 +8,10 @@ import moment from 'moment'
 
 import VCalendar from 'v-calendar';
 
-import '@/styles/main.scss';
 import 'ant-design-vue/dist/antd.css'
 import 'v-calendar/lib/v-calendar.min.css';
+import '@/styles/main.scss';
+import '@/styles/external/line-awesome.css';
 
 Vue.use(Antd);
 Vue.use(firestorePlugin);

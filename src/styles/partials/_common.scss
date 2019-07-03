@@ -1,8 +1,12 @@
 .base-box {
-  padding: 40px;
+  padding: 30px;
   border-radius: 20px;
   box-shadow: $ui-default-box-shadow--small;
   background: $white;
+
+  &--small {
+    padding: 25px;
+  }
 }
 
 .c-pane-container {
