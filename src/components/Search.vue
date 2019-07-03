@@ -2,14 +2,14 @@
   <div class="navigation">
     <BaseSearch
       :options="countriesNames"
-      @on-change="fetchActiveCountry"
+      @on-change="setActiveCountry"
     />
   </div>
 </template>
 
 <script>
   import { db } from '@/db';
-  import { mapActions } from 'vuex'
+  import { mapMutations } from 'vuex'
 
   import BaseSearch from '@/components/BaseSearch'
   import BaseButton from '@/components/BaseButton'
@@ -37,7 +37,7 @@
       countries: db.collection('countries')
     },
     methods: {
-      ...mapActions(['fetchActiveCountry'])
+      ...mapMutations(['setActiveCountry'])
     }
   }
 </script>

@@ -4,31 +4,31 @@
       <div class="row">
         <div class="col-5">
           <div class="base-box">
-            <div class="row">
-              <p>{{ countries[0].name }}</p>
+            <div class="row" v-if="country">
+              <p>{{ country.name }}</p>
               <p>
                 Cities:
-                <span v-for="city in countries[0].cities">
+                <span v-for="city in country.cities">
                   {{ city }}
                 </span>
               </p>
-              <p>Total cost: {{ countries[0].totalCost }}</p>
-              <p v-if="countries[0].visa">
-                Visa: {{ countries[0].visaCost }}
+              <p>Total cost: {{ country.totalCost }}</p>
+              <p v-if="country.visa">
+                Visa: {{ country.visaCost }}
               </p>
             </div>
           </div>
         </div>
         <div class="col-7">
           <div class="base-box">
-
+            {{ country }}
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-4">
           <div class="base-box">
-            
+
           </div>
         </div>
         <div class="col-4">
@@ -43,21 +43,24 @@
     </div>
     <div class="dashboard--side">
       <Search />
-      <div class="calendar"></div>
+
+      <v-calendar :attributes="attrs">
+      </v-calendar>
+
       <div class="notes">
         <div class="notes-header">
           <h1>Notes</h1>
           <BaseButton>Add new</BaseButton>
 
-          <div 
-              v-for="country in countries"
-              :key="country.name"
-            >
-              {{ country.name }}
-              <button @click="remove(country.id)">remove</button>
-              <button @click="elo2(country)">update elo melo</button>
-            </div>
-            <button @click="elo">click to add France</button>
+          <div
+            v-for="country in countries"
+            :key="country.name"
+          >
+            {{ country.name }}
+            <button @click="remove(country.id)">remove</button>
+            <button @click="elo2(country)">update elo melo</button>
+          </div>
+          <button @click="elo">click to add France</button>
         </div>
       </div>
     </div>
@@ -67,30 +70,56 @@
 <script>
   import { db } from '@/db';
   import { GeoPoint } from '@/db';
-  import { firestore } from 'firebase';
   import Search from '@/components/Search'
+  import BaseButton from '@/components/BaseButton'
 
   export default {
     name: 'dashboard',
     components: {
-      Search
+      Search,
+      BaseButton
     },
     data() {
       return {
         countries: [],
+        eloelo: this.country,
       }
     },
-    firestore: {
-      countries: db.collection('countries')
+    firestore() {
+      return {
+        countries: db.collection('countries')
+      };
+    },
+    computed: {
+      country() {
+        return this.countries.find((c) => c.id === this.$store.state.activeCountryId) || {}
+      },
+      attrs() {
+        return [
+          {
+            key: 'today',
+            highlight: {
+              backgroundColor: '#4C56C0',
+              // Other properties are available too, like `height` & `borderRadius`
+            },
+            contentStyle: {
+              color: '#FFF',
+            },
+            dates: [
+              { start: this.country.startDate, end: this.country.endDate},
+            ]
+          }
+        ]
+      }
     },
     methods: {
       // to remove
       async elo() {
         await db.collection('countries').add({
-          name: 'Australia',
-          createdAt: firestore.FieldValue.serverTimestamp(),
-          startDate: null,
-          endDate: null,
+          name: 'Poland',
+          createdAt: this.moment().format(),
+          startDate: this.moment(new Date(2019, 6, 1)).format(),
+          endDate: this.moment(new Date(2019, 6, 11)).format(),
           cities: ['Melbourne', 'Cairns', 'Sydney'],
           visa: true,
           visaCost: 100,

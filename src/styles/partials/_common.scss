@@ -4,3 +4,40 @@
   box-shadow: $ui-default-box-shadow--small;
   background: $white;
 }
+
+.c-pane-container {
+  background-color: transparent !important;
+  border: none !important;
+  width: 100%;
+
+  * {
+    @include font-weight(400);
+  }
+}
+
+.c-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .c-title-layout {
+    max-width: 100px;
+  }
+}
+
+.c-arrow-layout {
+  svg {
+    font-size: 1.2rem !important;
+    height: 1.2rem !important;
+    width: 1.2rem !important;
+  }
+}
+
+.c-weekday {
+  color: $primary;
+  @include font(15, 600);
+}
+
+.c-day {
+  padding: 4px 0;
+}
