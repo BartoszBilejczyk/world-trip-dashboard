@@ -9,7 +9,7 @@
 
 <script>
   import { db } from '@/db';
-  import { mapMutations } from 'vuex'
+  import { mapMutations } from 'vuex';
 
   import BaseSearch from '@/components/BaseSearch'
   import BaseButton from '@/components/BaseButton'

@@ -8,6 +8,13 @@ module.exports = {
           @import "@/styles/globals/_variables.scss";
           @import "@/styles/globals/_z-index.scss";
         `
+      },
+      less: {
+        modifyVars: {
+          'primary-color': '#4C56C0',
+          'link-color': '#4C56C0'
+        },
+        javascriptEnabled: true
       }
     }
   },

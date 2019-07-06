@@ -1,5 +1,27 @@
+.icon {
+  &--left {
+    margin-right: $ui-default-measure;
+  }
+
+  &--right {
+    margin-left: $ui-default-measure;
+  }
+
+  &--outlined {
+    position: relative;
+    background-color: $primary;
+    border-radius: $ui-default-border-radius--circle;
+    width: 20px;
+    height: 20px;
+    color: $white;
+
+    &:before {
+      @include center();
+    }
+  }
+}
 .base-box {
-  padding: 30px;
+  padding: $ui-default-measure2x 30px 30px 30px;
   border-radius: 20px;
   box-shadow: $ui-default-box-shadow--small;
   background: $white;

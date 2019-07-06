@@ -1,12 +1,17 @@
 <template>
   <div class="navigation">
-    <img src="@/assets/logo.png" alt="logo" class="logo">
+    <router-link to="/">
+      <img src="@/assets/logo.png" alt="logo" class="logo">
+    </router-link>
+    <router-link to="/admin">
+      Admin
+    </router-link>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Drawer'
+    name: 'Menu'
   }
 </script>
 

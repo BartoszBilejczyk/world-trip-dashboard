@@ -11,9 +11,9 @@
                {{ city }}
               </span>
             </p>
-            <hr class="divider divider--white" />
-            <p class="copy copy--color-white">Total cost: {{ country.totalCost }}</p>
-            <hr class="divider divider--white" />
+            <hr class="divider divider--white" v-if="country.totalCost" />
+            <p class="copy copy--color-white" v-if="country.totalCost">Total cost: {{ country.totalCost }}</p>
+            <hr class="divider divider--white" v-if="country.visa" />
             <p class="copy copy--color-white" v-if="country.visa">
               Visa: {{ country.visaCost }}
             </p>
@@ -26,15 +26,17 @@
             <div class="flights">
               <div v-for="flight in country.flights">
                 <div class="flights-item">
-                  <span class="copy--bold">{{ flight.from }} to {{ flight.to }}</span>
-                  <span>/</span>
-                  <span>{{ flight.priceMin }} - {{ flight.priceMax }}</span>
+                  <div>
+                    <span class="copy--bold flights-item-from-to">{{ flight.from }} to {{ flight.to }}</span>
+                    <span> / </span>
+                    <span>{{ flight.priceMin }} - {{ flight.priceMax }}</span>
+                  </div>
                   <a
                     :href="`https://www.google.com/flights?hl=pl#flt=${flight.fromCode}.${flight.toCode}.${moment(country.startDate).format('YYYY-MM-DD')};c:PLN;e:1;sd:1;t:f;tt:o`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
-                    <button>Search</button>
+                    <BaseButton filled icon="arrow-right" iconRight>Search</BaseButton>
                   </a>
                 </div>
                 <hr class="divider">
@@ -48,15 +50,17 @@
             <div class="accommodation">
               <div v-for="accommodation in country.accommodation">
                 <div class="accommodation-item">
-                  <span class="copy--bold">{{ accommodation.city }}</span>
-                  <span>/</span>
-                  <span>{{ accommodation.priceMin }} - {{ accommodation.priceMax }}</span>
+                  <div>
+                    <span class="copy--bold">{{ accommodation.city }}</span>
+                    <span> / </span>
+                    <span>{{ accommodation.priceMin }} - {{ accommodation.priceMax }}</span>
+                  </div>
                   <a
                     :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(country.startDate).format('YYYY-MM-DD')}&checkout=${moment(country.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
-                    <button>Search</button>
+                    <BaseButton filled icon="arrow-right" iconRight>Search</BaseButton>
                   </a>
                 </div>
                 <hr class="divider">
@@ -88,20 +92,7 @@
             <h2 class="heading heading--section">Costs</h2>
 
             <div class="costs">
-              <div class="costs__budget">
-                <div
-                  class="c100 big"
-                  :class="`p${country.totalCost / 100000 * 100}`"
-
-                >
-                  <span>{{ country.totalCost / 100000 * 100 }}%</span>
-                  <div class="slice">
-                    <div class="bar"></div>
-                    <div class="fill"></div>
-                  </div>
-                </div>
-              </div>
-
+              <AProgress :percent="country.totalCost / 100000 * 100" />
               <p class="copy">Total cost: {{ country.totalCost }}</p>
               <hr class="divider" />
               <p class="copy">Price Index: {{ country.priceIndex }}</p>
@@ -125,17 +116,13 @@
       <div class="notes">
         <div class="notes-header">
           <h1>Notes</h1>
-          <BaseButton>Add new</BaseButton>
-
           <div
             v-for="country in countries"
             :key="country.name"
           >
             {{ country.name }}
-            <button @click="remove(country.id)">remove</button>
-            <button @click="elo2(country)">update elo melo</button>
+            <BaseButton filled @click="remove(country.id)">remove</BaseButton>
           </div>
-          <button @click="elo">click to add France</button>
         </div>
       </div>
     </div>
@@ -144,7 +131,6 @@
 
 <script>
   import { db } from '@/db';
-  import { GeoPoint } from '@/db';
   import Search from '@/components/Search'
   import BaseButton from '@/components/BaseButton'
   import axios from 'axios'
@@ -199,73 +185,6 @@
       calendar.moveNextMonth();
     },
     methods: {
-      // to remove
-      async elo() {
-        await db.collection('countries').add({
-          name: 'Poland',
-          createdAt: this.moment().format(),
-          startDate: this.moment(new Date(2019, 7, 1)).format(),
-          endDate: this.moment(new Date(2019, 7, 11)).format(),
-          cities: ['Melbourne', 'Cairns', 'Sydney'],
-          visa: true,
-          visaCost: 100,
-          accommodation: [
-            {
-              city: 'Melbourne',
-              priceMin: 200,
-              priceMax: 300,
-              days: 4
-            },
-            {
-              city: 'Cairns',
-              priceMin: 200,
-              priceMax: 300,
-              days: 5
-            },
-            {
-              city: 'Sydney',
-              priceMin: 200,
-              priceMax: 300,
-              days: 3
-            },
-          ],
-          flights: [
-            {
-              from: 'Singapore',
-              fromCode: 'SIN',
-              to: 'Cairns',
-              toCode: 'CNS',
-              priceMin: 200,
-              priceMax: 300
-            },
-            {
-              from: 'Singapore',
-              fromCode: 'SIN',
-              to: 'Cairns',
-              toCode: 'CNS',
-              priceMin: 200,
-              priceMax: 300
-            },
-            {
-              from: 'Singapore',
-              fromCode: 'SIN',
-              to: 'Cairns',
-              toCode: 'CNS',
-              priceMin: 200,
-              priceMax: 300
-            }
-          ],
-          costs: {
-
-          },
-          totalCost: 2000,
-          priceIndex: 1.5,
-          notes: ['Note 1', 'Note 2']
-        })
-      },
-      async elo2(country) {
-        await db.collection('countries').doc(country.id).update({ eloMelo: [...country.eloMelo, { chuj: 'ci w dupe'}] })
-      },
       async remove(id) {
         await db.collection('countries').doc(id).delete();
       },
@@ -332,6 +251,7 @@
     &-header {
       display: flex;
       align-items: center;
+      flex-direction: column;
     }
   }
 
@@ -363,11 +283,26 @@
     &-item {
       display: flex;
       align-items: center;
+      justify-content: space-between;
 
-      > * {
-        margin-right: 15px;
+      > div {
+        display: flex;
+        align-items: center;
+
+        > * {
+          margin-right: $ui-default-measure;
+        }
+      }
+
+      .base-btn {
+        margin-left: $ui-default-measure;
       }
     }
+  }
+
+  .flights-item-from-to {
+    max-width: 100px;
+    display: inline-block;
   }
 
   .costs__budget {
@@ -375,5 +310,9 @@
     height: 160px;
     display: flex;
     align-items: center;
+  }
+
+  .base-box .heading--section {
+    margin: $ui-default-measure2x 0;
   }
 </style>

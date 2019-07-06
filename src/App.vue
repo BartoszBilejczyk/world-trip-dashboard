@@ -27,5 +27,7 @@
   .main {
     width: calc(100vw - 100px);
     flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 </style>

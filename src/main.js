@@ -8,7 +8,7 @@ import moment from 'moment'
 
 import VCalendar from 'v-calendar';
 
-import 'ant-design-vue/dist/antd.css'
+import 'ant-design-vue/dist/antd.less'
 import 'v-calendar/lib/v-calendar.min.css';
 import '@/styles/main.scss';
 import '@/styles/external/line-awesome.css';

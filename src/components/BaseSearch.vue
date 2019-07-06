@@ -1,17 +1,17 @@
 <template>
-  <a-select
+  <ASelect
     style="width: 250px"
     placeholder="Choose Country"
     @change="$emit('on-change', $event)"
   >
-    <a-select-option
+    <ASelectOption
       v-for="option in options"
       :value="option.value"
       :key="option.value"
     >
       {{ option.label }}
-    </a-select-option>
-  </a-select>
+    </ASelectOption>
+  </ASelect>
 </template>
 
 <script>
