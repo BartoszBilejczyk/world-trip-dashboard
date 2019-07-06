@@ -156,8 +156,8 @@
 
       update() {
         const payload = Object.assign({}, this.getOneCountry, {
-          startDate: this.moment(this.getOneCountry.startDate).format(),
-          endDate: this.moment(this.getOneCountry.endDate).format()
+          startDate: (!this.getOneCountry.startDate || this.getOneCountry.startDate === 'Invalid date') ? null : this.moment(this.getOneCountry.startDate).format() ,
+          endDate: (!this.getOneCountry.endDate || this.getOneCountry.endDate === 'Invalid date') ? null : this.moment(this.getOneCountry.endDate).format()
         });
 
         this.updateCountry(payload);

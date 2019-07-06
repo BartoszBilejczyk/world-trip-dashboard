@@ -4,6 +4,7 @@ import Dashboard from './views/Dashboard.vue'
 import Admin from './views/Admin.vue'
 import AdminNew from './views/AdminNew.vue'
 import AdminEdit from './views/AdminEdit.vue'
+import CountryList from './views/CountryList.vue'
 
 Vue.use(Router);
 
@@ -12,6 +13,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'continents',
+      component: CountryList
+    },
+    {
+      path: '/country',
       name: 'dashboard',
       component: Dashboard
     },

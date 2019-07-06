@@ -1,7 +1,7 @@
 <template>
   <ASelect
     style="width: 250px"
-    placeholder="Choose Country"
+    placeholder="Change Country"
     @change="$emit('on-change', $event)"
   >
     <ASelectOption

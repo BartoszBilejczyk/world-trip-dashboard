@@ -54,9 +54,9 @@ const store = new Vuex.Store({
         commit('addCountry', {...payload, id: doc.id});
       });
     },
-    async updateCountry({commit}, payload) {
-      await db.collection('countries').doc(this.$store.state.activeCountryId).update(payload).then((doc) => {
-        commit('updateCountry', {...payload, id: doc.id});
+    async updateCountry({commit, state}, payload) {
+      await db.collection('countries').doc(state.activeCountryId).update(payload).then((doc) => {
+        commit('updateCountry', {...payload, id: state.activeCountryId});
       })
     },
     async removeCountry({commit, state}, payload) {

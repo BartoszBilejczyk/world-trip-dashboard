@@ -1,4 +1,5 @@
 export const CONTINENTS = [
+  'World',
   'Africa',
   'Asia',
   'Australia',
