@@ -1,7 +1,7 @@
 <template>
   <div class="admin-new">
     <div class="container">
-      <AInput placeholder="Name" v-model="newCountry.name" />
+      <AInput placeholder="Name" v-model="newCountry.name" ref="nameInput" />
       <ASelect v-model="newCountry.continent" style='width: 300px'>
         <ASelectOption :value="continent" v-for="continent in continentList" :key="continent">{{ continent }}</ASelectOption>
       </ASelect>
@@ -126,6 +126,24 @@
         });
 
         this.addCountry(payload);
+
+        this.newCountry = {
+          createdAt: this.moment().format(),
+          name: '',
+          continent: '',
+          startDate: null,
+          endDate: null,
+          cities: '',
+          visa: false,
+          visaCost: '',
+          accommodation: [],
+          flights: [],
+          totalCost: '',
+          priceIndex: '',
+          notes: []
+        }
+
+        this.$refs.nameInput.focus();
       }
     }
   }

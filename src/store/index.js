@@ -41,7 +41,7 @@ const store = new Vuex.Store({
     async fetchCountries({commit}) {
       let countries = [];
 
-      await db.collection('countries').get().then(querySnapshot => {
+      await db.collection('countries').orderBy('name').get().then(querySnapshot => {
         querySnapshot.docs.forEach((doc) => {
           countries.push({...doc.data(), id: doc.id});
         });

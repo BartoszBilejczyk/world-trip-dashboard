@@ -9,7 +9,7 @@
 
 <script>
   import { db } from '@/db';
-  import { mapMutations } from 'vuex';
+  import { mapMutations, mapState } from 'vuex';
 
   import BaseSearch from '@/components/BaseSearch'
   import BaseButton from '@/components/BaseButton'
@@ -20,21 +20,15 @@
       BaseSearch,
       BaseButton
     },
-    data() {
-      return {
-        countries: [],
-      }
-    },
     computed: {
+      ...mapState(['countries']),
+
       countriesNames() {
         return this.countries.map(o => ({
           label: o.name,
           value: o.id
         }));
       }
-    },
-    firestore: {
-      countries: db.collection('countries')
     },
     methods: {
       ...mapMutations(['setActiveCountry'])
