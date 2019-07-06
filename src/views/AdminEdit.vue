@@ -14,33 +14,41 @@
         </ASelectOption>
       </ASelect>
 
-      <div class="edited-country" v-if="countryData.name">
-        <AInput placeholder="Name" v-model="countryData.name" />
-        <ASelect v-model="countryData.continent" style='width: 300px'>
+      <div class="edited-country" v-if="getOneCountry.name">
+        <AInput placeholder="Name" v-model="getOneCountry.name" />
+        <ASelect v-model="getOneCountry.continent" style='width: 300px'>
           <ASelectOption :value="continent" v-for="continent in continentList" :key="continent">{{ continent }}</ASelectOption>
         </ASelect>
-        <ADatePicker placeholder="Start date" v-model="countryData.startDate" />
-        <ADatePicker placeholder="End date" v-model="countryData.endDate" />
-        <AInput placeholder="Cities" v-model="countryData.cities" />
-        <AInput placeholder="Total cost" v-model="countryData.totalCost" />
-        <AInput placeholder="Price Index" v-model="countryData.priceIndex" />
+        <ADatePicker
+          placeholder="Start date"
+          :value="getOneCountry.startDate ? moment(getOneCountry.startDate) : null"
+          @change="getOneCountry.startDate = $event"
+        />
+        <ADatePicker
+          placeholder="End date"
+          :value="getOneCountry.endDate ? moment(getOneCountry.endDate) : null"
+          @change="getOneCountry.endDate = $event"
+        />
+        <AInput placeholder="Cities" v-model="getOneCountry.cities" />
+        <AInput placeholder="Total cost" v-model="getOneCountry.totalCost" />
+        <AInput placeholder="Price Index" v-model="getOneCountry.priceIndex" />
 
-        <ARadioGroup v-model="countryData.visa">
+        <ARadioGroup v-model="getOneCountry.visa">
           <ARadioButton :value="true">Yes</ARadioButton>
           <ARadioButton :value="false">No</ARadioButton>
         </ARadioGroup>
 
-        <AInput placeholder="Cost of visa" v-model="countryData.visaCost" v-if="countryData.visa" />
+        <AInput placeholder="Cost of visa" v-model="getOneCountry.visaCost" v-if="getOneCountry.visa" />
 
-        <BaseButton filled @click="countryData.accommodation.push({...emptyAccommodation})">
+        <BaseButton filled @click="getOneCountry.accommodation.push({...emptyAccommodation})">
           Add accommodation item
         </BaseButton>
-        <BaseButton v-if="countryData.accommodation" filled @click="countryData.accommodation.splice(-1, 1)">
+        <BaseButton v-if="getOneCountry.accommodation" filled @click="getOneCountry.accommodation.splice(-1, 1)">
           Remove last accommodation item
         </BaseButton>
 
-        <div class="accommodation" v-if="countryData.accommodation">
-          <div class="accommodation-item" v-for="(acc, index) in countryData.accommodation" :key="index">
+        <div class="accommodation" v-if="getOneCountry.accommodation">
+          <div class="accommodation-item" v-for="(acc, index) in getOneCountry.accommodation" :key="index">
             <AInput placeholder="City" v-model="acc.city" />
             <AInput placeholder="Price Min" v-model="acc.priceMin" />
             <AInput placeholder="Price Max" v-model="acc.priceMax" />
@@ -51,12 +59,12 @@
         <BaseButton filled @click="flights.push({...emptyFlight})">
           Add flights item
         </BaseButton>
-        <BaseButton v-if="countryData.flights" filled @click="countryData.flights.splice(-1, 1)">
+        <BaseButton v-if="getOneCountry.flights" filled @click="getOneCountry.flights.splice(-1, 1)">
           Remove last flight item
         </BaseButton>
 
-        <div class="flights" v-if="countryData.flights">
-          <div class="flights-item" v-for="(flight, index) in countryData.flights" :key="index">
+        <div class="flights" v-if="getOneCountry.flights">
+          <div class="flights-item" v-for="(flight, index) in getOneCountry.flights" :key="index">
             <AInput placeholder="From city" v-model="flight.from" />
             <AInput placeholder="From Code" v-model="flight.fromCode" />
             <AInput placeholder="To City" v-model="flight.to" />
@@ -66,27 +74,46 @@
           </div>
         </div>
 
-        <BaseButton filled @click="countryData.notes.push({...emptyNote})">
+        <BaseButton filled @click="getOneCountry.notes.push({...emptyNote})">
           Add notes item
         </BaseButton>
-        <BaseButton v-if="countryData.notes" filled @click="countryData.notes.splice(-1, 1)">
+        <BaseButton v-if="getOneCountry.notes" filled @click="getOneCountry.notes.splice(-1, 1)">
           Remove last notes item
         </BaseButton>
 
         <div class="notes">
-          <div class="notes-item" v-for="(note, index) in countryData.notes" :key="index">
+          <div class="notes-item" v-for="(note, index) in getOneCountry.notes" :key="index">
             <ATextarea v-model="note.note" :rows="5"></ATextarea>
           </div>
         </div>
 
-        <BaseButton @click="editCountry">Edit country</BaseButton>
+        <BaseButton @click="update">Edit country</BaseButton>
+      </div>
+
+      <div class="remove">
+        DELETE:
+
+        <ASelect
+          style='width: 300px'
+          @change="countryToRemove = $event"
+        >
+          <ASelectOption
+            v-for="country in countries"
+            :value="country.id"
+            :key="country.id"
+          >
+            {{ country.name }}
+          </ASelectOption>
+        </ASelect>
+
+        <BaseButton @click="remove">Remove country</BaseButton>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapMutations } from 'vuex';
+  import { mapMutations, mapActions, mapGetters, mapState } from 'vuex';
 
   import { CONTINENTS } from '../constants';
   import BaseButton from '@/components/BaseButton'
@@ -97,7 +124,7 @@
     components: { BaseButton },
     data() {
       return {
-        countries: [],
+        countryToRemove: '',
         emptyAccommodation: {
           city: '',
           priceMin: '',
@@ -117,32 +144,26 @@
         },
         continentList: CONTINENTS,
         selectedCountry: '',
-        countryData: {}
       }
-    },
-    firestore() {
-      return {
-        countries: db.collection('countries')
-      };
     },
     computed: {
-      country() {
-        const country = {...this.countries.find((c) => c.id === this.$store.state.activeCountryId)};
-
-        this.countryData = Object.assign({}, country, {
-          startDate: this.moment(this.countryData.startDate),
-          endDate: this.moment(this.countryData.endDate)
-        });
-      }
+      ...mapGetters(['getOneCountry']),
+      ...mapState(['countries'])
     },
     methods: {
+      ...mapActions(['updateCountry', 'removeCountry']),
       ...mapMutations(['setActiveCountry']),
 
-      async editCountry() {
-        await db.collection('countries').doc(this.$store.state.activeCountryId).update(Object.assign({}, this.countryData, {
-          startDate: this.moment(this.countryData.startDate).format(),
-          endDate: this.moment(this.countryData.endDate).format()
-        }))
+      update() {
+        const payload = Object.assign({}, this.getOneCountry, {
+          startDate: this.moment(this.getOneCountry.startDate).format(),
+          endDate: this.moment(this.getOneCountry.endDate).format()
+        });
+
+        this.updateCountry(payload);
+      },
+      remove() {
+        this.removeCountry(this.countryToRemove);
       }
     }
   }

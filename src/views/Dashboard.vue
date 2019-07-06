@@ -4,18 +4,18 @@
       <div class="row">
         <div class="col-4">
           <div class="base-box dashboard__main-info">
-            <h1 class="heading heading--primary heading--color-white">{{ country.name }}</h1>
-            <p class="copy copy--color-white">
+            <h1 class="heading heading--primary heading--color-white">{{ getOneCountry.name }}</h1>
+            <p class="copy copy--color-white" v-if="getOneCountry.cities">
               Cities:
-              <span v-for="city in country.cities">
+              <span v-for="city in Array.of(getOneCountry.cities)">
                {{ city }}
               </span>
             </p>
-            <hr class="divider divider--white" v-if="country.totalCost" />
-            <p class="copy copy--color-white" v-if="country.totalCost">Total cost: {{ country.totalCost }}</p>
-            <hr class="divider divider--white" v-if="country.visa" />
-            <p class="copy copy--color-white" v-if="country.visa">
-              Visa: {{ country.visaCost }}
+            <hr class="divider divider--white" v-if="getOneCountry.totalCost" />
+            <p class="copy copy--color-white" v-if="getOneCountry.totalCost">Total cost: {{ getOneCountry.totalCost }}</p>
+            <hr class="divider divider--white" v-if="getOneCountry.visa" />
+            <p class="copy copy--color-white" v-if="getOneCountry.visa">
+              Visa: {{ getOneCountry.visaCost }}
             </p>
           </div>
         </div>
@@ -24,7 +24,7 @@
             <h2 class="heading heading--section">Flights</h2>
 
             <div class="flights">
-              <div v-for="flight in country.flights">
+              <div v-for="flight in getOneCountry.flights">
                 <div class="flights-item">
                   <div>
                     <span class="copy--bold flights-item-from-to">{{ flight.from }} to {{ flight.to }}</span>
@@ -32,7 +32,7 @@
                     <span>{{ flight.priceMin }} - {{ flight.priceMax }}</span>
                   </div>
                   <a
-                    :href="`https://www.google.com/flights?hl=pl#flt=${flight.fromCode}.${flight.toCode}.${moment(country.startDate).format('YYYY-MM-DD')};c:PLN;e:1;sd:1;t:f;tt:o`"
+                    :href="`https://www.google.com/flights?hl=pl#flt=${flight.fromCode}.${flight.toCode}.${moment(getOneCountry.startDate).format('YYYY-MM-DD')};c:PLN;e:1;sd:1;t:f;tt:o`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -48,7 +48,7 @@
           <div class="base-box">
             <h2 class="heading heading--section">Accommodation</h2>
             <div class="accommodation">
-              <div v-for="accommodation in country.accommodation">
+              <div v-for="accommodation in getOneCountry.accommodation">
                 <div class="accommodation-item">
                   <div>
                     <span class="copy--bold">{{ accommodation.city }}</span>
@@ -56,7 +56,7 @@
                     <span>{{ accommodation.priceMin }} - {{ accommodation.priceMax }}</span>
                   </div>
                   <a
-                    :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(country.startDate).format('YYYY-MM-DD')}&checkout=${moment(country.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
+                    :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(getOneCountry.startDate).format('YYYY-MM-DD')}&checkout=${moment(getOneCountry.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -75,7 +75,7 @@
             <div class="flex">
               <h2 class="heading heading--section">Weather</h2>
               <div>
-                <span v-for="city in country.cities">
+                <span v-for="city in Array.of(getOneCountry.cities)">
                  <span
                    class="city"
                    @click="getCurrentWeather(city)"
@@ -92,10 +92,10 @@
             <h2 class="heading heading--section">Costs</h2>
 
             <div class="costs">
-              <AProgress :percent="country.totalCost / 100000 * 100" />
-              <p class="copy">Total cost: {{ country.totalCost }}</p>
+              <AProgress :percent="getOneCountry.totalCost / 100000 * 100" />
+              <p class="copy">Total cost: {{ getOneCountry.totalCost }}</p>
               <hr class="divider" />
-              <p class="copy">Price Index: {{ country.priceIndex }}</p>
+              <p class="copy">Price Index: {{ getOneCountry.priceIndex }}</p>
             </div>
           </div>
         </div>
@@ -116,13 +116,6 @@
       <div class="notes">
         <div class="notes-header">
           <h1>Notes</h1>
-          <div
-            v-for="country in countries"
-            :key="country.name"
-          >
-            {{ country.name }}
-            <BaseButton filled @click="remove(country.id)">remove</BaseButton>
-          </div>
         </div>
       </div>
     </div>
@@ -130,6 +123,8 @@
 </template>
 
 <script>
+  import { mapState, mapGetters } from 'vuex';
+
   import { db } from '@/db';
   import Search from '@/components/Search'
   import BaseButton from '@/components/BaseButton'
@@ -143,20 +138,13 @@
     },
     data() {
       return {
-        countries: [],
-        eloelo: this.country,
         weatherData: []
       }
     },
-    firestore() {
-      return {
-        countries: db.collection('countries')
-      };
-    },
     computed: {
-      country() {
-        return this.countries.find((c) => c.id === this.$store.state.activeCountryId) || {}
-      },
+      ...mapState(['countries']),
+      ...mapGetters(['getOneCountry']),
+
       attrs() {
         return [
           {
@@ -169,32 +157,18 @@
               color: '#FFF',
             },
             dates: [
-              { start: this.country.startDate, end: this.country.endDate},
+              { start: this.getOneCountry.startDate, end: this.getOneCountry.endDate},
             ]
           }
         ]
       }
     },
-    mounted() {
-      // Get reference to the calendar component
-      const calendar = this.$refs.calendar;
-      // Call method of the component
-      const page = { month: 2, year: 2020 }; // February, 2020
-      // Pass a date
-      // Pass a page ({ month, year })
-      calendar.moveNextMonth();
-    },
     methods: {
-      async remove(id) {
-        await db.collection('countries').doc(id).delete();
-      },
       async getCurrentWeather(city) {
         await axios
           .get(`http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&units=metric&cnt=7&APPID=0741e0fc29ec393451e350d27c1db6d6`)
           .then(response => (this.weatherData = response.data))
       }
-
-      // get country from store
     }
   }
 </script>

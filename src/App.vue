@@ -8,11 +8,20 @@
 </template>
 
 <script>
-  import Navigation from '@/components/Navigation'
+  import Navigation from '@/components/Navigation';
+  import { db } from '@/db';
+  import { mapActions } from 'vuex';
 
   export default {
     name: 'App',
-    components: { Navigation }
+    components: { Navigation },
+    methods: {
+      ...mapActions(['fetchCountries'])
+    },
+
+    mounted() {
+      this.fetchCountries();
+    }
   }
 </script>
 

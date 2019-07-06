@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <BaseButton filled @click="flights.push({...emptyFlight})">
+      <BaseButton filled @click="newCountry.flights.push({...emptyFlight})">
         Add flights item
       </BaseButton>
       <BaseButton v-if="newCountry.flights.length" filled @click="newCountry.flights.splice(-1, 1)">
@@ -65,15 +65,16 @@
         </div>
       </div>
 
-      <BaseButton @click="addCountry">Add country</BaseButton>
+      <BaseButton @click="add">Add country</BaseButton>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+
   import { CONTINENTS } from '../constants';
   import BaseButton from '@/components/BaseButton'
-  import { db, GeoPoint } from '@/db';
 
   export default {
     name: 'admin-new',
@@ -116,11 +117,15 @@
       }
     },
     methods: {
-      async addCountry() {
-        await db.collection('countries').add(Object.assign({}, this.newCountry, {
+      ...mapActions(['addCountry']),
+
+      add() {
+        const payload = Object.assign({}, this.newCountry, {
           startDate: this.newCountry.startDate ? this.moment(this.newCountry.startDate).format() : null,
           endDate: this.newCountry.endDate ? this.moment(this.newCountry.endDate).format() : null
-        }));
+        });
+
+        this.addCountry(payload);
       }
     }
   }
