@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import moment from 'moment'
 
 Vue.use(Vuex);
 
@@ -9,7 +10,8 @@ const store = new Vuex.Store({
   state: {
     activeCountryId: '',
     countries: [],
-    loading: false
+    loading: false,
+    currentMonth: null
   },
   mutations: {
     setActiveCountry(state, payload) {
@@ -35,10 +37,57 @@ const store = new Vuex.Store({
     setLoading(state, payload) {
       state.loading = payload
     },
+    setCurrentMonth(state, payload) {
+      state.currentMonth = payload
+    },
   },
   getters: {
-    getOneCountry(state) {
+    selectedCountry(state) {
       return state.activeCountryId ? state.countries.find((c) => c.id === state.activeCountryId) : {}
+    },
+    selectedCountryTotalCost(state, getters) {
+      if (state.activeCountryId) {
+        let flightsCost = 0;
+        let accommodationCost = 0;
+        let lifeCost = 0;
+
+        const transport = 15;
+        const food = 45;
+        const other = 10;
+        const fun = 20;
+
+        getters.selectedCountry.accommodation.forEach(acc => {
+          accommodationCost += ((Number(acc.priceMin) + Number(acc.priceMax)) / 2) * acc.days
+        });
+
+        getters.selectedCountry.flights.forEach(flight => {
+          flightsCost += ((Number(flight.priceMin) + Number(flight.priceMax)) / 2)
+        });
+
+        getters.selectedCountry.accommodation.forEach(acc => {
+          lifeCost += getters.selectedCountry.priceIndex * acc.days * (transport + food + other + fun);
+        });
+
+        return {
+          flightsCost: flightsCost.toFixed(),
+          accommodationCost: accommodationCost.toFixed(),
+          lifeCost: lifeCost.toFixed(),
+          totalCost: flightsCost + accommodationCost + lifeCost
+        };
+      }
+    },
+    countriesCurrentMonth(state) {
+      return state.countries.filter(c => {
+        return (moment(c.startDate).month() === moment(state.currentMonth).month() || moment(c.endDate).month() === moment(state.currentMonth).month()) && moment(c.startDate).year() === moment(state.currentMonth).year()
+      }).sort((a, b) => {
+        if (a.startDate > b.startDate) {
+          return 1;
+        }
+        if (b.startDate > a.startDate) {
+          return -1;
+        }
+        return 0;
+      });
     }
   },
   actions: {

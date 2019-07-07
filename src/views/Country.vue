@@ -5,30 +5,64 @@
         <div class="col-4">
           <div
             class="base-box country__main-info"
-            v-if="getOneCountry.name"
-            :style="{ backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(' + require(`../static/backgrounds/${getOneCountry.name.toLowerCase().split(' ').join('')}_background.jpg`) + ')' }"
+            :style="{ backgroundImage: selectedCountry.name && 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(' + require(`../static/backgrounds/${selectedCountry.name.toLowerCase().split(' ').join('')}_background.jpg`) + ')' }"
           >
-            <h1 class="heading heading--primary heading--color-white">{{ getOneCountry.name }}</h1>
-            <p class="copy copy--color-white" v-if="getOneCountry.cities">
+            <h1 class="heading heading--primary heading--color-white">{{ selectedCountry.name }}</h1>
+            <p class="copy copy--color-white" v-if="selectedCountry.cities">
               Cities:
-              <span v-for="city in Array.of(getOneCountry.cities)">
+              <span v-for="city in Array.of(selectedCountry.cities)">
                {{ city }}
               </span>
             </p>
-            <hr class="divider divider--white" v-if="getOneCountry.totalCost" />
-            <p class="copy copy--color-white" v-if="getOneCountry.totalCost">Total cost: {{ getOneCountry.totalCost }}</p>
-            <hr class="divider divider--white" v-if="getOneCountry.visa" />
-            <p class="copy copy--color-white" v-if="getOneCountry.visa">
-              Visa: {{ getOneCountry.visaCost }}
+            <hr class="divider divider--white" v-if="selectedCountry.totalCost" />
+            <p class="copy copy--color-white" v-if="selectedCountry.totalCost">Total cost: {{ selectedCountry.totalCost }}</p>
+            <hr class="divider divider--white" v-if="selectedCountry.visa" />
+            <p class="copy copy--color-white" v-if="selectedCountry.visa">
+              Visa: {{ selectedCountry.visaCost }}
             </p>
           </div>
         </div>
         <div class="col-4">
           <div class="base-box">
+            <calendar-view
+              :showDate="events[0].startDate"
+              :events="events"
+              :startingDayOfWeek="1"
+            >
+              <calendar-view-header
+                slot="header"
+                slot-scope="t"
+                :header-props="t.headerProps"
+                @input="setDateToShow" />
+
+              <!--<div-->
+              <!--slot="header"-->
+              <!--slot-scope="props"-->
+              <!--:header-props="props.headerProps"-->
+              <!--@input="setDateToShow"-->
+              <!--&gt;-->
+              <!--<div class="calendar-header">-->
+              <!--<button @click="$emit('input', props.headerProps.previousFullPeriod)"><</button>-->
+              <!--<h2>{{ props.headerProps.currentPeriodLabel }}</h2>-->
+              <!--<button @click="$emit('input', props.headerProps.nextFullPeriod)">></button>-->
+              <!--</div>-->
+              <!--</div>-->
+            </calendar-view>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="base-box">
+            <Weather :cities="selectedCountry.cities"></Weather>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <div class="base-box">
             <h2 class="heading heading--section">Flights</h2>
 
             <div class="flights">
-              <div v-for="flight in getOneCountry.flights">
+              <div v-for="flight in selectedCountry.flights">
                 <div class="flights-item">
                   <div>
                     <span class="copy--bold flights-item-from-to">{{ flight.from }} to {{ flight.to }}</span>
@@ -36,7 +70,7 @@
                     <span>{{ flight.priceMin }} - {{ flight.priceMax }}</span>
                   </div>
                   <a
-                    :href="`https://www.google.com/flights?hl=pl#flt=${flight.fromCode}.${flight.toCode}.${moment(getOneCountry.startDate).format('YYYY-MM-DD')};c:PLN;e:1;sd:1;t:f;tt:o`"
+                    :href="`https://www.google.com/flights?hl=pl#flt=${flight.fromCode}.${flight.toCode}.${moment(selectedCountry.startDate).format('YYYY-MM-DD')};c:PLN;e:1;sd:1;t:f;tt:o`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -52,7 +86,7 @@
           <div class="base-box">
             <h2 class="heading heading--section">Accommodation</h2>
             <div class="accommodation">
-              <div v-for="accommodation in getOneCountry.accommodation">
+              <div v-for="accommodation in selectedCountry.accommodation">
                 <div class="accommodation-item">
                   <div>
                     <span class="copy--bold">{{ accommodation.city }}</span>
@@ -60,7 +94,7 @@
                     <span>{{ accommodation.priceMin }} - {{ accommodation.priceMax }}</span>
                   </div>
                   <a
-                    :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(getOneCountry.startDate).format('YYYY-MM-DD')}&checkout=${moment(getOneCountry.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
+                    :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(selectedCountry.startDate).format('YYYY-MM-DD')}&checkout=${moment(selectedCountry.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -72,58 +106,24 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-5">
-          <div class="base-box">
-            <Weather :cities="getOneCountry.cities"></Weather>
-          </div>
-        </div>
-        <div class="col-4">
+        <div class="col-3">
           <div class="base-box">
             <h2 class="heading heading--section">Costs</h2>
 
-            <div class="costs">
-              <AProgress :percent="getOneCountry.totalCost / 100000 * 100" />
-              <p class="copy">Total cost: {{ getOneCountry.totalCost }}</p>
+            <div class="costs" v-if="selectedCountryTotalCost">
+              <p class="copy">Total cost: {{ selectedCountryTotalCost.totalCost }}</p>
+              <p class="copy">Flights cost: {{ selectedCountryTotalCost.flightsCost }}</p>
+              <p class="copy">Accommodation cost: {{ selectedCountryTotalCost.accommodationCost }}</p>
+              <p class="copy">Life cost: {{ selectedCountryTotalCost.lifeCost }}</p>
               <hr class="divider" />
-              <p class="copy">Price Index: {{ getOneCountry.priceIndex }}</p>
+              <p class="copy">Price Index: {{ selectedCountry.priceIndex }}</p>
             </div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="base-box">
-            <h2 class="heading heading--section">Other information</h2>
           </div>
         </div>
       </div>
     </div>
     <div class="country__side">
       <Search />
-      <calendar-view
-        :showDate="events[0].startDate"
-        :events="events"
-        :startingDayOfWeek="1"
-      >
-        <calendar-view-header
-          slot="header"
-          slot-scope="t"
-          :header-props="t.headerProps"
-          @input="setDateToShow" />
-
-        <!--<div-->
-          <!--slot="header"-->
-          <!--slot-scope="props"-->
-          <!--:header-props="props.headerProps"-->
-          <!--@input="setDateToShow"-->
-        <!--&gt;-->
-          <!--<div class="calendar-header">-->
-            <!--<button @click="$emit('input', props.headerProps.previousFullPeriod)"><</button>-->
-            <!--<h2>{{ props.headerProps.currentPeriodLabel }}</h2>-->
-            <!--<button @click="$emit('input', props.headerProps.nextFullPeriod)">></button>-->
-          <!--</div>-->
-        <!--</div>-->
-      </calendar-view>
 
       <div class="notes">
         <div class="notes-header">
@@ -161,7 +161,7 @@
     },
     computed: {
       ...mapState(['countries']),
-      ...mapGetters(['getOneCountry']),
+      ...mapGetters(['selectedCountry', 'selectedCountryTotalCost']),
 
       attrs() {
         return [
@@ -175,16 +175,16 @@
               color: '#FFF',
             },
             dates: [
-              { start: this.getOneCountry.startDate, end: this.getOneCountry.endDate},
+              { start: this.selectedCountry.startDate, end: this.selectedCountry.endDate},
             ]
           }
         ]
       },
       events() {
         return [{
-          id: this.getOneCountry.id,
-          startDate: this.getOneCountry.startDate,
-          endDate: this.getOneCountry.endDate,
+          id: this.selectedCountry.id,
+          startDate: this.selectedCountry.startDate,
+          endDate: this.selectedCountry.endDate,
           title: ' '
         }]
       }
@@ -206,12 +206,11 @@
     display: flex;
 
     &__main {
-      padding: 60px 80px;
+      padding: 60px;
       background: $gray;
       flex: 1;
 
       &-info {
-        background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('../assets/poland.jpg');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -222,7 +221,7 @@
     }
 
     &__side {
-      width: 450px;
+      width: 350px;
       box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.03);
       z-index: 20;
       padding: 60px 45px;
@@ -270,8 +269,6 @@
     padding: 0 10px;
   }
 
-
-
   .flights,
   .accommodation {
     &-item {
@@ -295,7 +292,6 @@
   }
 
   .flights-item-from-to {
-    max-width: 100px;
     display: inline-block;
   }
 
@@ -320,7 +316,7 @@
       max-height: 340px;
       width: 100%;
       background: $gray;
-      margin: 40px 0;
+      margin: 20px 0 40px;
       background: transparent;
 
       * {

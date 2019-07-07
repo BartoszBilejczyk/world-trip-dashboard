@@ -14,41 +14,41 @@
         </ASelectOption>
       </ASelect>
 
-      <div class="edited-country" v-if="getOneCountry.name">
-        <AInput placeholder="Name" v-model="getOneCountry.name" />
-        <ASelect v-model="getOneCountry.continent" style='width: 300px'>
+      <div class="edited-country" v-if="selectedCountry.name">
+        <AInput placeholder="Name" v-model="selectedCountry.name" />
+        <ASelect v-model="selectedCountry.continent" style='width: 300px'>
           <ASelectOption :value="continent" v-for="continent in continentList" :key="continent">{{ continent }}</ASelectOption>
         </ASelect>
         <ADatePicker
           placeholder="Start date"
-          :value="getOneCountry.startDate ? moment(getOneCountry.startDate) : null"
-          @change="getOneCountry.startDate = $event"
+          :value="selectedCountry.startDate ? moment(selectedCountry.startDate) : null"
+          @change="selectedCountry.startDate = $event"
         />
         <ADatePicker
           placeholder="End date"
-          :value="getOneCountry.endDate ? moment(getOneCountry.endDate) : null"
-          @change="getOneCountry.endDate = $event"
+          :value="selectedCountry.endDate ? moment(selectedCountry.endDate) : null"
+          @change="selectedCountry.endDate = $event"
         />
-        <AInput placeholder="Cities" v-model="getOneCountry.cities" />
-        <AInput placeholder="Total cost" v-model="getOneCountry.totalCost" />
-        <AInput placeholder="Price Index" v-model="getOneCountry.priceIndex" />
+        <AInput placeholder="Cities" v-model="selectedCountry.cities" />
+        <AInput placeholder="Total cost" v-model="selectedCountry.totalCost" />
+        <AInput placeholder="Price Index" v-model="selectedCountry.priceIndex" />
 
-        <ARadioGroup v-model="getOneCountry.visa">
+        <ARadioGroup v-model="selectedCountry.visa">
           <ARadioButton :value="true">Yes</ARadioButton>
           <ARadioButton :value="false">No</ARadioButton>
         </ARadioGroup>
 
-        <AInput placeholder="Cost of visa" v-model="getOneCountry.visaCost" v-if="getOneCountry.visa" />
+        <AInput placeholder="Cost of visa" v-model="selectedCountry.visaCost" v-if="selectedCountry.visa" />
 
-        <BaseButton filled @click="getOneCountry.accommodation.push({...emptyAccommodation})">
+        <BaseButton filled @click="selectedCountry.accommodation.push({...emptyAccommodation})">
           Add accommodation item
         </BaseButton>
-        <BaseButton v-if="getOneCountry.accommodation" filled @click="getOneCountry.accommodation.splice(-1, 1)">
+        <BaseButton v-if="selectedCountry.accommodation" filled @click="selectedCountry.accommodation.splice(-1, 1)">
           Remove last accommodation item
         </BaseButton>
 
-        <div class="accommodation" v-if="getOneCountry.accommodation">
-          <div class="accommodation-item" v-for="(acc, index) in getOneCountry.accommodation" :key="index">
+        <div class="accommodation" v-if="selectedCountry.accommodation">
+          <div class="accommodation-item" v-for="(acc, index) in selectedCountry.accommodation" :key="index">
             <AInput placeholder="City" v-model="acc.city" />
             <AInput placeholder="Price Min" v-model="acc.priceMin" />
             <AInput placeholder="Price Max" v-model="acc.priceMax" />
@@ -56,15 +56,15 @@
           </div>
         </div>
 
-        <BaseButton filled @click="getOneCountry.flights.push({...emptyFlight})">
+        <BaseButton filled @click="selectedCountry.flights.push({...emptyFlight})">
           Add flights item
         </BaseButton>
-        <BaseButton v-if="getOneCountry.flights" filled @click="getOneCountry.flights.splice(-1, 1)">
+        <BaseButton v-if="selectedCountry.flights" filled @click="selectedCountry.flights.splice(-1, 1)">
           Remove last flight item
         </BaseButton>
 
-        <div class="flights" v-if="getOneCountry.flights">
-          <div class="flights-item" v-for="(flight, index) in getOneCountry.flights" :key="index">
+        <div class="flights" v-if="selectedCountry.flights">
+          <div class="flights-item" v-for="(flight, index) in selectedCountry.flights" :key="index">
             <AInput placeholder="From city" v-model="flight.from" />
             <AInput placeholder="From Code" v-model="flight.fromCode" />
             <AInput placeholder="To City" v-model="flight.to" />
@@ -74,15 +74,15 @@
           </div>
         </div>
 
-        <BaseButton filled @click="getOneCountry.notes.push({...emptyNote})">
+        <BaseButton filled @click="selectedCountry.notes.push({...emptyNote})">
           Add notes item
         </BaseButton>
-        <BaseButton v-if="getOneCountry.notes" filled @click="getOneCountry.notes.splice(-1, 1)">
+        <BaseButton v-if="selectedCountry.notes" filled @click="selectedCountry.notes.splice(-1, 1)">
           Remove last notes item
         </BaseButton>
 
         <div class="notes">
-          <div class="notes-item" v-for="(note, index) in getOneCountry.notes" :key="index">
+          <div class="notes-item" v-for="(note, index) in selectedCountry.notes" :key="index">
             <ATextarea v-model="note.note" :rows="5"></ATextarea>
           </div>
         </div>
@@ -142,12 +142,11 @@
         emptyNote: {
           note: ''
         },
-        continentList: CONTINENTS,
-        selectedCountry: '',
+        continentList: CONTINENTS
       }
     },
     computed: {
-      ...mapGetters(['getOneCountry']),
+      ...mapGetters(['selectedCountry']),
       ...mapState(['countries'])
     },
     methods: {
@@ -155,9 +154,9 @@
       ...mapMutations(['setActiveCountry']),
 
       update() {
-        const payload = Object.assign({}, this.getOneCountry, {
-          startDate: (!this.getOneCountry.startDate || this.getOneCountry.startDate === 'Invalid date') ? null : this.moment(this.getOneCountry.startDate).format() ,
-          endDate: (!this.getOneCountry.endDate || this.getOneCountry.endDate === 'Invalid date') ? null : this.moment(this.getOneCountry.endDate).format()
+        const payload = Object.assign({}, this.selectedCountry, {
+          startDate: (!this.selectedCountry.startDate || this.selectedCountry.startDate === 'Invalid date') ? null : this.moment(this.selectedCountry.startDate).format() ,
+          endDate: (!this.selectedCountry.endDate || this.selectedCountry.endDate === 'Invalid date') ? null : this.moment(this.selectedCountry.endDate).format()
         });
 
         this.updateCountry(payload);
@@ -172,5 +171,10 @@
 <style scoped lang="scss">
   .admin-edit {
     overflow-y: auto;
+  }
+
+  .flights-item,
+  .accommodation-item {
+    margin-bottom: 20px;
   }
 </style>

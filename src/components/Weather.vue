@@ -15,11 +15,11 @@
       </div>
     </div>
     <ul class="weather-data" v-if="weatherData && weatherData.city && weatherData.list">
-      <h2 class="heading heading--section">Current weather in {{ weatherData.city.name }}, {{ weatherData.city.country }}</h2>
+      <h2 class="heading heading--subsection">Current weather in {{ weatherData.city.name }}, {{ weatherData.city.country }}</h2>
       <div class="weather-data__days">
         <li
           class="weather-data__item"
-          v-for="(weather, index) in weatherData.list"
+          v-for="(weather, index) in weatherData.list.slice(0,5)"
           :key="index"
         >
           <div>{{ moment().add(index, 'days').format('DD, MMM') }}</div>
@@ -69,15 +69,9 @@
     height: 100%;
   }
 
-  .weather-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
   .city {
     cursor: pointer;
-    margin-left: 10px;
+    margin-right: $ui-default-measure;
 
     &--active {
       @include font-weight(700);

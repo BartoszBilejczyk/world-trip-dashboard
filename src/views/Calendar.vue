@@ -10,8 +10,24 @@
         slot="header"
         slot-scope="t"
         :header-props="t.headerProps"
-        @input="setDateToShow" />
+        @input="handleDateChange" />
     </calendar-view>
+    <ul class="country-list">
+      <li
+        class="country-list__item"
+        v-for="country in countriesCurrentMonth"
+      >
+        <h2 class="heading heading--section">{{ country.name }}</h2>
+        <p class="copy copy--large">{{ moment(country.startDate).format("DD MMM YYYY") }} to {{ moment(country.endDate).format("DD MMM YYYY") }}</p>
+        <div
+          class="calendar-image"
+          :style="{
+            backgroundImage: country.name && 'url(' + require(`../static/backgrounds/${country.name.toLowerCase().split(' ').join('')}_background.jpg`) + ')',
+            maxHeight: `calc(100vh / ${countriesCurrentMonth.length} - 160px)`
+          }"
+        ></div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -21,7 +37,7 @@
     CalendarViewHeader,
     CalendarMathMixin,
   } from 'vue-simple-calendar'
-  import { mapState, mapMutations } from 'vuex';
+  import { mapState, mapMutations, mapGetters } from 'vuex';
 
   export default {
     name: 'calendar',
@@ -31,12 +47,13 @@
     },
     data() {
       return {
-        showDate: new Date(),
+        showDate: new Date('10-10-2020'),
         weatherData: []
       }
     },
     computed: {
-      ...mapState(['countries']),
+      ...mapState(['countries', 'currentMonth']),
+      ...mapGetters(['countriesCurrentMonth']),
 
       events() {
         return this.countries.map(c => (
@@ -49,8 +66,11 @@
         ))
       }
     },
+    mounted() {
+      this.setCurrentMonth(this.showDate);
+    },
     methods: {
-      ...mapMutations(['setActiveCountry']),
+      ...mapMutations(['setActiveCountry', 'setCurrentMonth']),
 
       setDateToShow(d) {
         this.showDate = d;
@@ -58,18 +78,52 @@
       goToCountry(id) {
         this.setActiveCountry(id);
         this.$router.push('/country')
+      },
+      handleDateChange(d) {
+        this.showDate = d;
+        this.setCurrentMonth(this.showDate);
       }
     }
   }
 </script>
 
+<style scoped lang="scss">
+  .country-list {
+    padding-left: 80px;
+    display: flex;
+    flex-flow: row wrap;
+    width: 700px;
+    justify-content: center;
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: calc(50% - 20px);
+      margin: 20px 10px;
+    }
+  }
+
+  .calendar-image {
+    margin-top: $ui-default-measure2x;
+    width: 100%;
+    min-height: 150px;
+    height: 150px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
+
 <style lang="scss">
   .calendar-view {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex: 1;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 8%;
 
     .cv-wrapper {
       display: block;
@@ -106,25 +160,47 @@
       }
 
       .currentPeriod {
-        @include font(25, 600);
+        display: none;
       }
 
       .nextPeriod,
       .previousPeriod {
         @include font(25, 600);
       }
+      .nextYear,
+      .previousYear {
+        display: none;
+      }
+
+      .previousPeriod {
+        margin-right: 120px;
+      }
+
+      .nextPeriod {
+        margin-left: 80px;
+      }
 
       .cv-header {
         margin-bottom: $ui-default-measure;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
 
         * {
           background: transparent;
           border: none;
         }
+        
+        &-nav {
+          position: absolute;
+        }
       }
+      
 
       .periodLabel {
         justify-content: center;
+        padding-left: 30px;
       }
 
       .cv-event {
@@ -134,7 +210,46 @@
         border-radius: 8px;
         top: $ui-default-measure3x !important;
         height: 28px;
+        text-align: center;
       }
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+
+    .cv-event.span1 {
+      width: calc((100% / 7) - #{$ui-default-measure2x});
+    }
+
+    .cv-event.span2 {
+      width: calc((200% / 7) - #{$ui-default-measure2x});
+    }
+
+    .cv-event.span3 {
+      width: calc((300% / 7) - #{$ui-default-measure2x});
+      text-align: center;
+    }
+
+    .cv-event.span4 {
+      width: calc((400% / 7) - #{$ui-default-measure2x});
+      text-align: center;
+    }
+
+    .cv-event.span5 {
+      width: calc((500% / 7) - #{$ui-default-measure2x});
+      text-align: center;
+    }
+
+    .cv-event.span6 {
+      width: calc((600% / 7) - #{$ui-default-measure2x});
+      text-align: center;
+    }
+
+    .cv-event.span7 {
+      width: calc((700% / 7) - #{$ui-default-measure2x});
+      text-align: center;
     }
   }
 </style>
