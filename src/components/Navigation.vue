@@ -3,8 +3,14 @@
     <router-link to="/">
       <img src="@/assets/logo.png" alt="logo" class="logo">
     </router-link>
-    <router-link to="/admin">
-      Admin
+    <router-link to="/calendar">
+      Calendar
+    </router-link>
+    <router-link to="/country">
+      Country details
+    </router-link>
+    <router-link to="/budget">
+      Budget
     </router-link>
   </div>
 </template>

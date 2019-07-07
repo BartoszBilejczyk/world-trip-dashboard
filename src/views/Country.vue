@@ -1,9 +1,9 @@
 <template>
-  <div class="dashboard">
-    <div class="dashboard__main">
+  <div class="country">
+    <div class="country__main">
       <div class="row">
         <div class="col-4">
-          <div class="base-box dashboard__main-info">
+          <div class="base-box country__main-info">
             <h1 class="heading heading--primary heading--color-white">{{ getOneCountry.name }}</h1>
             <p class="copy copy--color-white" v-if="getOneCountry.cities">
               Cities:
@@ -106,7 +106,7 @@
         </div>
       </div>
     </div>
-    <div class="dashboard__side">
+    <div class="country__side">
       <Search />
       <v-calendar
         ref="calendar"
@@ -131,7 +131,7 @@
   import axios from 'axios'
 
   export default {
-    name: 'dashboard',
+    name: 'country',
     components: {
       Search,
       BaseButton
@@ -174,7 +174,7 @@
 </script>
 
 <style scoped lang="scss">
-  .dashboard {
+  .country {
     height: 100vh;
     display: flex;
 
