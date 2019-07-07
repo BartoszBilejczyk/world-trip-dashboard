@@ -2,19 +2,25 @@
   <div id="app">
     <Navigation />
     <div class="main">
-      <router-view/>
+      <Loader :loading="loading">
+        <router-view/>
+      </Loader>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapActions, mapState } from 'vuex';
+
   import Navigation from '@/components/Navigation';
-  import { db } from '@/db';
-  import { mapActions } from 'vuex';
+  import Loader from '@/components/Loader';
 
   export default {
     name: 'App',
-    components: { Navigation },
+    components: { Navigation, Loader },
+    computed: {
+      ...mapState(['loading'])
+    },
     methods: {
       ...mapActions(['fetchCountries'])
     },

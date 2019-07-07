@@ -8,7 +8,6 @@
 </template>
 
 <script>
-  import { db } from '@/db';
   import { mapMutations, mapState } from 'vuex';
 
   import BaseSearch from '@/components/BaseSearch'

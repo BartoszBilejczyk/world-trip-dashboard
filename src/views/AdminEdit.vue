@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-new">
+  <div class="admin-edit">
     <div class="container">
       <ASelect
         style='width: 300px'
@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <BaseButton filled @click="flights.push({...emptyFlight})">
+        <BaseButton filled @click="getOneCountry.flights.push({...emptyFlight})">
           Add flights item
         </BaseButton>
         <BaseButton v-if="getOneCountry.flights" filled @click="getOneCountry.flights.splice(-1, 1)">
@@ -170,5 +170,7 @@
 </script>
 
 <style scoped lang="scss">
-
+  .admin-edit {
+    overflow-y: auto;
+  }
 </style>

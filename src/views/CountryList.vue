@@ -1,23 +1,21 @@
 <template lang="html">
-  <Loader :loading="loading" :large="true">
-    <div class="country-list-wrapper">
-      <div class="continents" v-if="!loading">
-        <div class="continents-images">
-          <div v-for="continent in continents" :key="continent" class="continent" :class="{ 'active': activeContinent === continent}" @click="activeContinent = continent">
-            <img :src="require(`../assets/${continent}.svg`)" class="continent-image img-responsive">
-            <span class="continent-name">{{ continent }}</span>
-          </div>
+  <div class="country-list-wrapper">
+    <div class="continents" v-if="!loading">
+      <div class="continents-images">
+        <div v-for="continent in continents" :key="continent" class="continent" :class="{ 'active': activeContinent === continent}" @click="activeContinent = continent">
+          <img :src="require(`../assets/${continent}.svg`)" class="continent-image img-responsive">
+          <span class="continent-name">{{ continent }}</span>
         </div>
       </div>
-      <ul class="country-list">
-        <li class="country-name" :class="{ 'active': activeContinent === country.continent || activeContinent === 'World' }" v-for="country in countries" :key="country.name">
-          <div @click="setCountry(country.name)">
-            <AIcon type="global" /> {{ country.name }}
-          </div>
-        </li>
-      </ul>
     </div>
-  </Loader>
+    <ul class="country-list">
+      <li class="country-name" :class="{ 'active': activeContinent === country.continent || activeContinent === 'World' }" v-for="country in countries" :key="country.name">
+        <div @click="setCountry(country.name)">
+          <AIcon type="global" /> {{ country.name }}
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>

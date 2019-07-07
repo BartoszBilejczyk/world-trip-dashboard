@@ -3,7 +3,11 @@
     <div class="country__main">
       <div class="row">
         <div class="col-4">
-          <div class="base-box country__main-info">
+          <div
+            class="base-box country__main-info"
+            v-if="getOneCountry.name"
+            :style="{ backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(' + require(`../static/backgrounds/${getOneCountry.name.toLowerCase().split(' ').join('')}_background.jpg`) + ')' }"
+          >
             <h1 class="heading heading--primary heading--color-white">{{ getOneCountry.name }}</h1>
             <p class="copy copy--color-white" v-if="getOneCountry.cities">
               Cities:
@@ -72,19 +76,7 @@
       <div class="row">
         <div class="col-5">
           <div class="base-box">
-            <div class="flex">
-              <h2 class="heading heading--section">Weather</h2>
-              <div>
-                <span v-for="city in Array.of(getOneCountry.cities)">
-                 <span
-                   class="city"
-                   @click="getCurrentWeather(city)"
-                 >
-                   {{ city }}
-                 </span>
-                </span>
-              </div>
-            </div>
+            <Weather :cities="getOneCountry.cities"></Weather>
           </div>
         </div>
         <div class="col-4">
@@ -144,16 +136,14 @@
 
 <script>
   import { mapState, mapGetters } from 'vuex';
-  import axios from 'axios'
   import {
     CalendarView,
     CalendarViewHeader,
   } from 'vue-simple-calendar'
 
-  import { db } from '@/db';
   import Search from '@/components/Search'
   import BaseButton from '@/components/BaseButton'
-
+  import Weather from '@/components/Weather'
 
   export default {
     name: 'country',
@@ -161,12 +151,12 @@
       Search,
       BaseButton,
       CalendarView,
-      CalendarViewHeader
+      CalendarViewHeader,
+      Weather
     },
     data() {
       return {
         showDate: new Date(),
-        weatherData: []
       }
     },
     computed: {
@@ -200,11 +190,6 @@
       }
     },
     methods: {
-      async getCurrentWeather(city) {
-        await axios
-          .get(`http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&units=metric&cnt=7&APPID=0741e0fc29ec393451e350d27c1db6d6`)
-          .then(response => (this.weatherData = response.data))
-      },
       setDateToShow(d) {
         this.showDate = d;
       },
