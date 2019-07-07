@@ -1,6 +1,7 @@
 <template>
   <div class="navigation">
     <BaseSearch
+      :value="selectedCountry ? selectedCountry.id : ''"
       :options="countriesNames"
       @on-change="setActiveCountry"
     />
@@ -8,7 +9,7 @@
 </template>
 
 <script>
-  import { mapMutations, mapState } from 'vuex';
+  import { mapMutations, mapState, mapGetters } from 'vuex';
 
   import BaseSearch from '@/components/BaseSearch'
   import BaseButton from '@/components/BaseButton'
@@ -21,6 +22,7 @@
     },
     computed: {
       ...mapState(['countries']),
+      ...mapGetters(['selectedCountry']),
 
       countriesNames() {
         return this.countries.map(o => ({

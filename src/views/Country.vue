@@ -312,11 +312,11 @@
     .cv-wrapper {
       display: block;
       height: auto;
-      min-height: 340px;
-      max-height: 340px;
+      min-height: 370px;
+      max-height: 370px;
       width: 100%;
       background: $gray;
-      margin: 20px 0 40px;
+      margin: 0 0 40px;
       background: transparent;
 
       * {

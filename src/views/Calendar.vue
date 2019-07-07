@@ -16,6 +16,7 @@
       <li
         class="country-list__item"
         v-for="country in countriesCurrentMonth"
+        @click="goToCountry(country.id)"
       >
         <h2 class="heading heading--section">{{ country.name }}</h2>
         <p class="copy copy--large">{{ moment(country.startDate).format("DD MMM YYYY") }} to {{ moment(country.endDate).format("DD MMM YYYY") }}</p>
@@ -102,6 +103,7 @@
       justify-content: center;
       width: calc(50% - 20px);
       margin: 20px 10px;
+      cursor: pointer;
     }
   }
 

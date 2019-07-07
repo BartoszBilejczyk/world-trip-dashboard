@@ -1,5 +1,6 @@
 <template>
   <ASelect
+    :value="value"
     style="width: 250px"
     placeholder="Change Country"
     @change="$emit('on-change', $event)"
@@ -18,6 +19,10 @@
   export default {
     name: 'BaseSearch',
     props: {
+      value: {
+        type: String,
+        default: ''
+      },
       options: {
         type: Array,
         default: () => []
