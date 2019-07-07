@@ -108,10 +108,30 @@
     </div>
     <div class="country__side">
       <Search />
-      <v-calendar
-        ref="calendar"
-        :attributes="attrs"
-      />
+      <calendar-view
+        :showDate="events[0].startDate"
+        :events="events"
+        :startingDayOfWeek="1"
+      >
+        <calendar-view-header
+          slot="header"
+          slot-scope="t"
+          :header-props="t.headerProps"
+          @input="setDateToShow" />
+
+        <!--<div-->
+          <!--slot="header"-->
+          <!--slot-scope="props"-->
+          <!--:header-props="props.headerProps"-->
+          <!--@input="setDateToShow"-->
+        <!--&gt;-->
+          <!--<div class="calendar-header">-->
+            <!--<button @click="$emit('input', props.headerProps.previousFullPeriod)"><</button>-->
+            <!--<h2>{{ props.headerProps.currentPeriodLabel }}</h2>-->
+            <!--<button @click="$emit('input', props.headerProps.nextFullPeriod)">></button>-->
+          <!--</div>-->
+        <!--</div>-->
+      </calendar-view>
 
       <div class="notes">
         <div class="notes-header">
@@ -124,20 +144,28 @@
 
 <script>
   import { mapState, mapGetters } from 'vuex';
+  import axios from 'axios'
+  import {
+    CalendarView,
+    CalendarViewHeader,
+  } from 'vue-simple-calendar'
 
   import { db } from '@/db';
   import Search from '@/components/Search'
   import BaseButton from '@/components/BaseButton'
-  import axios from 'axios'
+
 
   export default {
     name: 'country',
     components: {
       Search,
-      BaseButton
+      BaseButton,
+      CalendarView,
+      CalendarViewHeader
     },
     data() {
       return {
+        showDate: new Date(),
         weatherData: []
       }
     },
@@ -161,6 +189,14 @@
             ]
           }
         ]
+      },
+      events() {
+        return [{
+          id: this.getOneCountry.id,
+          startDate: this.getOneCountry.startDate,
+          endDate: this.getOneCountry.endDate,
+          title: ' '
+        }]
       }
     },
     methods: {
@@ -168,6 +204,12 @@
         await axios
           .get(`http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&units=metric&cnt=7&APPID=0741e0fc29ec393451e350d27c1db6d6`)
           .then(response => (this.weatherData = response.data))
+      },
+      setDateToShow(d) {
+        this.showDate = d;
+      },
+      setNewDate(a) {
+        console.log(a)
       }
     }
   }
@@ -212,13 +254,6 @@
     .base-box {
       height: inherit;
     }
-  }
-
-  .calendar {
-    height: 350px;
-    width: 100%;
-    background: $gray;
-    margin: 40px 0;
   }
 
   .notes {
@@ -288,5 +323,72 @@
 
   .base-box .heading--section {
     margin: $ui-default-measure2x 0;
+  }
+</style>
+
+<style lang="scss">
+  .country {
+    .cv-wrapper {
+      display: block;
+      height: auto;
+      min-height: 340px;
+      max-height: 340px;
+      width: 100%;
+      background: $gray;
+      margin: 40px 0;
+      background: transparent;
+
+      * {
+        border: none;
+      }
+
+      .cv-day {
+        justify-content: center;
+        align-items: center;
+      }
+
+      .outsideOfMonth {
+        opacity: 0.4;
+      }
+
+      .currentPeriod {
+        @include font(25, 600);
+      }
+
+      .nextPeriod,
+      .previousPeriod {
+        @include font(25, 600);
+      }
+
+      .nextYear,
+      .previousYear {
+        display: none;
+      }
+
+      .cv-header {
+        margin-bottom: $ui-default-measure;
+
+        * {
+          background: transparent;
+          border: none;
+        }
+
+        &-nav {
+          display: none;
+        }
+      }
+
+      .periodLabel {
+        justify-content: center;
+      }
+
+      .cv-event {
+        background: transparent;
+        border: 2px solid $primary;
+        border-radius: 8px;
+        top: 10px !important;
+        height: 28px;
+      }
+    }
   }
 </style>
