@@ -1,7 +1,7 @@
 <template lang="html">
-  <div class="country-list-wrapper">
-    <div class="container">
-      <div class="continents">
+  <Loader :loading="loading" :large="true">
+    <div class="country-list-wrapper">
+      <div class="continents" v-if="!loading">
         <div class="continents-images">
           <div v-for="continent in continents" :key="continent" class="continent" :class="{ 'active': activeContinent === continent}" @click="activeContinent = continent">
             <img :src="require(`../assets/${continent}.svg`)" class="continent-image img-responsive">
@@ -17,15 +17,19 @@
         </li>
       </ul>
     </div>
-  </div>
+  </Loader>
 </template>
 
 <script>
-  import { CONTINENTS } from '../constants/index';
   import { mapState, mapMutations } from 'vuex';
+
+  import Loader from '@/components/Loader'
+
+  import { CONTINENTS } from '../constants/index';
 
   export default {
     name: 'country-list',
+    components: { Loader },
     data() {
       return {
         continents: CONTINENTS,
@@ -33,7 +37,7 @@
       }
     },
     computed: {
-      ...mapState(['countries']),
+      ...mapState(['countries', 'loading']),
     },
     methods: {
       ...mapMutations(['setActiveCountry']),
@@ -52,13 +56,16 @@
 <style lang="scss" scoped>
   .country-list-wrapper {
     background: $gray;
+    display: flex;
     flex: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
 
   .continents-images {
     display: flex;
     justify-content: space-around;
-    padding-bottom: 35px;
     flex-wrap: wrap;
   }
   
@@ -67,27 +74,29 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 20px;
+    margin: 20px 30px;
     cursor: pointer;
 
     &.active .continent-name {
-      color: $primary;
+      color: $text;
       @include font-weight(700);
     }
 
     &.active .continent-image {
       filter: contrast(1);
+      opacity: 1;
     }
 
     &-name {
       @include font(20);
-      color: lighten($primary, 20%);
+      color: lighten($text, 30%);
     }
   }
   
   .continent-image {
     filter: contrast(0);
-    max-height: 100px;
+    opacity: 0.7;
+    max-height: 120px;
     margin-bottom: 30px;
     transition: 0.4s ease;
   }
@@ -105,7 +114,8 @@
       flex-wrap: wrap;
       display: flex;
       justify-content: flex-end;
-      margin-top: 40px;
+      margin-top: 70px;
+      max-width: 1400px;
     }
     &-name {
       position: relative;
@@ -114,16 +124,16 @@
       min-width: 150px;
       @include font(18, 300);
       margin: 15px 10px;
-      color: lighten($primary, 20%);
+      color: lighten($text, 30%);
       cursor: pointer;
       transition: 0.4s ease;
 
       &.active {
-        color: $primary;
+        color: $text;
         @include font-weight(700);
 
         span {
-          border-bottom: 1px solid $primary;
+          border-bottom: 1px solid $text;
         }
 
         svg {

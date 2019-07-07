@@ -8,7 +8,8 @@ import { db } from '@/db';
 const store = new Vuex.Store({
   state: {
     activeCountryId: '',
-    countries: []
+    countries: [],
+    loading: false
   },
   mutations: {
     setActiveCountry(state, payload) {
@@ -31,6 +32,9 @@ const store = new Vuex.Store({
     removeCountry(state, payload) {
       state.countries = state.countries.filter(c => c.id !== payload);
     },
+    setLoading(state, payload) {
+      state.loading = payload
+    },
   },
   getters: {
     getOneCountry(state) {
@@ -39,6 +43,7 @@ const store = new Vuex.Store({
   },
   actions: {
     async fetchCountries({commit}) {
+      commit('setLoading', true);
       let countries = [];
 
       await db.collection('countries').orderBy('name').get().then(querySnapshot => {
@@ -47,7 +52,8 @@ const store = new Vuex.Store({
         });
       });
 
-      commit('setCountries', countries)
+      commit('setCountries', countries);
+      commit('setLoading', false);
     },
     async addCountry({commit}, payload) {
       await db.collection('countries').add(payload).then((doc) => {

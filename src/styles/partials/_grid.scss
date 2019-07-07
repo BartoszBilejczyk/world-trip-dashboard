@@ -5,6 +5,9 @@ $gutter2x: 2 * $gutter;
   max-width: $min-app-width;
   width: 95%;
   margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 
   @media screen and (min-width: 1440px) {
     // max-width larger to match design width

@@ -11,34 +11,19 @@
     </div>
     <div
       :class="[{
-        'loader--visible': props.loading,
-        'loader--white': props.white,
-        'loader--small': props.small,
-        'loader--x-small': props.xsmall,
+        'loader-spinner--visible': props.loading,
+        'loader-spinner--white': props.white,
+        'loader-spinner--small': props.small,
+        'loader-spinner--large': props.large,
+        'loader-spinner--component': props.isComponent,
       }]"
       v-bind="$attrs"
-      class="loader"
-    >
-      <div
-        v-for="no in 5"
-        :key="no"
-      ></div>
-    </div>
+      class="loader-spinner"></div>
   </div>
 </template>
 
 <style scoped lang="scss">
-  span {
-    position: absolute;
-    top: 30px;
-  }
-
   .loader {
-    display: none;
-    @include center();
-    width: 35px;
-    height: 35px;
-
     &--visible {
       display: block;
     }
@@ -47,10 +32,15 @@
     &-blur {
       position: relative;
       display: flex;
+      flex-direction: column;
       height: inherit;
       flex: 1;
       width: inherit;
       max-height: 100%;
+    }
+
+    &-blur > * {
+      width: 100%;
     }
 
     &-wrapper--visible {
@@ -58,41 +48,65 @@
     }
 
     &-blur--visible {
+      pointer-events: none;
       filter: blur(2px);
+    }
+  }
+
+  @mixin setSize($value) {
+    width: $value;
+    height: $value;
+    left: calc(50% - #{$value / 2});
+    bottom: calc(50vh - #{$value / 2});
+  }
+
+  .loader-spinner,
+  .loader-spinner:after {
+    border-radius: 50%;
+    width: $ui-default-measure3x;
+    height: $ui-default-measure3x;
+  }
+  .loader-spinner {
+    $standardSize: 12px;
+    $largeSize: 36px;
+
+    position: absolute;
+    left: calc(50% - #{$standardSize});
+    bottom: calc(50vh - #{$standardSize});
+    border: 1px solid;
+    border-color: $primary $primary $primary transparent;
+    animation: loaderAnimation 1.1s infinite linear;
+    display: none;
+    
+    &--visible {
+      display: block;
+    }
+
+    &--component {
+      bottom: calc(50% - #{$standardSize});
+    }
+
+    &--white {
+      border-color: transparent $white $white $white;
     }
 
     &--small {
-      width: 25px;
-      height: 25px;
+      @include setSize($standardSize);
     }
 
-    &--x-small {
-      width: 15px;
-      height: 15px;
+    &--large {
+      @include setSize($largeSize);
+      border-width: 2px;
     }
   }
 
-  .loader div {
-    width: 35px;
-    height: 35px;
-    border: 3px solid;
-    border-color: $primary transparent transparent transparent;
+  @keyframes loaderAnimation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
-  .loader.loader--white div {
-    border: 3px solid;
-    border-color: $white transparent transparent transparent;
-  }
-
-  .loader.loader--small div {
-    width: 25px;
-    height: 25px;
-    border-width: 2px;
-  }
-
-  .loader.loader--x-small div {
-    width: 15px;
-    height: 15px;
-    border-width: 1px;
-  }
 </style>
