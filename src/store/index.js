@@ -88,6 +88,46 @@ const store = new Vuex.Store({
         }
         return 0;
       });
+    },
+    allCountriesTotalCost(state) {
+      return state.countries.map(c => {
+        let flightsCost = 0;
+        let accommodationCost = 0;
+        let lifeCost = 0;
+
+        const transport = 15;
+        const food = 45;
+        const other = 10;
+        const fun = 20;
+
+        c.accommodation.forEach(acc => {
+          accommodationCost += ((Number(acc.priceMin) + Number(acc.priceMax)) / 2) * acc.days
+        });
+
+        c.flights.forEach(flight => {
+          flightsCost += ((Number(flight.priceMin) + Number(flight.priceMax)) / 2)
+        });
+
+        c.accommodation.forEach(acc => {
+          lifeCost += c.priceIndex * acc.days * (transport + food + other + fun);
+        });
+
+        return {
+          name: c.name,
+          flightsCost: flightsCost.toFixed(),
+          accommodationCost: accommodationCost.toFixed(),
+          lifeCost: lifeCost.toFixed(),
+          totalCost: flightsCost + accommodationCost + lifeCost
+        };
+      }).sort((a, b) => {
+        if (a.totalCost > b.totalCost) {
+          return 1;
+        }
+        if (b.totalCost > a.totalCost) {
+          return -1;
+        }
+        return 0;
+      });
     }
   },
   actions: {

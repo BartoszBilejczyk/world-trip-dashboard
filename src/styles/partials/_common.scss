@@ -67,3 +67,25 @@
 .c-day {
   padding: 4px 0;
 }
+
+/* x axis */
+.frappe-chart .x.axis .line-vertical,
+.frappe-chart .y.axis .line-horizontal,
+.frappe-chart .y.axis .line-horizontal,
+.frappe-chart .y.axis .line-horizontal text,
+.frappe-chart .legend,
+.frappe-chart .x.axis .line-vertical,
+.frappe-chart .y.axis .line-horizontal {
+  display: none;
+}
+
+.frappe-chart .x.axis text,
+.frappe-chart .y.axis text {
+  @include font(14, 700);
+}
+
+.frappe-chart .x.axis text {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+

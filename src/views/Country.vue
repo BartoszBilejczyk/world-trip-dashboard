@@ -93,8 +93,10 @@
                     <span> / </span>
                     <span>{{ accommodation.priceMin }} - {{ accommodation.priceMax }}</span>
                   </div>
+                  <!--:href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(selectedCountry.startDate).format('YYYY-MM-DD')}&checkout=${moment(selectedCountry.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"-->
+
                   <a
-                    :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment(selectedCountry.startDate).format('YYYY-MM-DD')}&checkout=${moment(selectedCountry.startDate).add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
+                    :href="`https://www.airbnb.com/s/homes?refinement_paths%5B%5D=%2Fhomes&query=${accommodation.city}&search_type=filter_change&checkin=${moment('09-09-2019').format('YYYY-MM-DD')}&checkout=${moment('09-09-2019').add(accommodation.days, 'd').format('YYYY-MM-DD')}&adults=1&room_types%5B%5D=Private%20room&room_types%5B%5D=Shared%20room&s_tag=8DWMm8pZ`"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -271,6 +273,9 @@
 
   .flights,
   .accommodation {
+    overflow-y: auto;
+    height: 80%;
+
     &-item {
       display: flex;
       align-items: center;

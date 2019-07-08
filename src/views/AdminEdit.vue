@@ -43,7 +43,7 @@
         <BaseButton filled @click="selectedCountry.accommodation.push({...emptyAccommodation})">
           Add accommodation item
         </BaseButton>
-        <BaseButton v-if="selectedCountry.accommodation" filled @click="selectedCountry.accommodation.splice(-1, 1)">
+        <BaseButton v-if="selectedCountry.accommodation.length" filled @click="selectedCountry.accommodation.splice(-1, 1)">
           Remove last accommodation item
         </BaseButton>
 
@@ -59,7 +59,7 @@
         <BaseButton filled @click="selectedCountry.flights.push({...emptyFlight})">
           Add flights item
         </BaseButton>
-        <BaseButton v-if="selectedCountry.flights" filled @click="selectedCountry.flights.splice(-1, 1)">
+        <BaseButton v-if="selectedCountry.flights.length" filled @click="selectedCountry.flights.splice(-1, 1)">
           Remove last flight item
         </BaseButton>
 
@@ -77,7 +77,7 @@
         <BaseButton filled @click="selectedCountry.notes.push({...emptyNote})">
           Add notes item
         </BaseButton>
-        <BaseButton v-if="selectedCountry.notes" filled @click="selectedCountry.notes.splice(-1, 1)">
+        <BaseButton v-if="selectedCountry.notes.length" filled @click="selectedCountry.notes.splice(-1, 1)">
           Remove last notes item
         </BaseButton>
 
