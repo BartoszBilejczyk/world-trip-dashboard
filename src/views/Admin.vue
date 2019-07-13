@@ -1,10 +1,14 @@
 <template>
   <div class="admin">
     <router-link to="/admin/new">
-      <BaseButton>Add new country</BaseButton>
+      <BaseButton>
+        Add new country
+      </BaseButton>
     </router-link>
     <router-link to="/admin/edit">
-      <BaseButton>Edit existing country</BaseButton>
+      <BaseButton>
+        Edit existing country
+      </BaseButton>
     </router-link>
   </div>
 </template>

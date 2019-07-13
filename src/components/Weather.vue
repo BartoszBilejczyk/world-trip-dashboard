@@ -14,29 +14,36 @@
       </span>
       </div>
     </div>
-    <ul class="weather-data" v-if="weatherData && weatherData.city && weatherData.list">
-      <h2 class="heading heading--subsection">Current weather in {{ weatherData.city.name }}, {{ weatherData.city.country }}</h2>
-      <div class="weather-data__days">
-        <li
-          class="weather-data__item"
-          v-for="(weather, index) in weatherData.list.slice(0,5)"
-          :key="index"
-        >
-          <div>{{ moment().add(index, 'days').format('DD, MMM') }}</div>
-          <img :src="`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`" alt="Weather icon">
-          <div class="temperature">
-            {{ weather.temp.day.toFixed() }}<span class="celsius"> &#8451;</span>
-          </div>
-          <!--<span class="day">{{ moment(week[index]).format('ddd') }}</span>-->
-          <img class="weather-type" src="" alt="">
-        </li>
-      </div>
-    </ul>
+    <Loader
+      :loading="loading"
+      :component="true"
+    >
+      <ul class="weather-data" v-if="weatherData && weatherData.city && weatherData.list">
+        <h2 class="heading heading--subsection">Current weather in {{ weatherData.city.name }}, {{ weatherData.city.country }}</h2>
+        <div class="weather-data__days">
+          <li
+            class="weather-data__item"
+            v-for="(weather, index) in weatherData.list.slice(0,5)"
+            :key="index"
+          >
+            <div>{{ moment().add(index, 'days').format('DD, MMM') }}</div>
+            <img :src="`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`" alt="Weather icon">
+            <div class="temperature">
+              {{ weather.temp.day.toFixed() }}<span class="celsius"> &#8451;</span>
+            </div>
+            <!--<span class="day">{{ moment(week[index]).format('ddd') }}</span>-->
+            <img class="weather-type" src="" alt="">
+          </li>
+        </div>
+      </ul>
+    </Loader>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
+  import axios from 'axios';
+
+  import Loader from '@/components/Loader';
 
   export default {
     name: 'weather',
@@ -46,27 +53,48 @@
         default: () => ''
       }
     },
+    components: {
+      Loader
+    },
     data() {
       return {
         weatherData: [],
-        activeCity: ''
+        activeCity: '',
+        loading: false
       }
     },
     methods: {
       async getCurrentWeather(city) {
+        this.loading = true;
         this.activeCity = city;
 
         await axios
           .get(`http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&units=metric&cnt=7&APPID=0741e0fc29ec393451e350d27c1db6d6`)
-          .then(response => (this.weatherData = response.data))
-      },
+          .then(response => (this.weatherData = response.data));
+
+        this.loading = false;
+      }
+    },
+    mounted() {
+      if (this.cities) {
+        this.getCurrentWeather(this.cities.split(', ')[0]);
+      }
     }
   }
 </script>
 
+<style lang="scss">
+  .weather {
+    .loader-wrapper {
+      max-height: 80%;
+    }
+  }
+</style>
+
 <style scoped lang="scss">
   .weather {
     height: 100%;
+    position: relative;
   }
 
   .city {

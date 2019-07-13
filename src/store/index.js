@@ -90,7 +90,7 @@ const store = new Vuex.Store({
       });
     },
     allCountriesTotalCost(state) {
-      return state.countries.map(c => {
+      const countries = state.countries.map(c => {
         let flightsCost = 0;
         let accommodationCost = 0;
         let lifeCost = 0;
@@ -105,7 +105,7 @@ const store = new Vuex.Store({
         });
 
         c.flights.forEach(flight => {
-          flightsCost += ((Number(flight.priceMin) + Number(flight.priceMax)) / 2)
+          flightsCost += ((Number(flight.priceMin) + Number(flight.priceMax)) / 2) + 120; // 120 is price for luggage
         });
 
         c.accommodation.forEach(acc => {
@@ -128,6 +128,26 @@ const store = new Vuex.Store({
         }
         return 0;
       });
+
+      let totalFlightsCost = 0;
+      let totalAccommodationCost = 0;
+      let totalLifeCost = 0;
+      let totalCost = 0;
+
+      countries.forEach(c => {
+        totalFlightsCost += Number(c.flightsCost);
+        totalAccommodationCost += Number(c.accommodationCost);
+        totalLifeCost += Number(c.lifeCost);
+        totalCost += Number(c.flightsCost) + Number(c.accommodationCost) + Number(c.lifeCost);
+      });
+
+      return {
+        countries,
+        totalFlightsCost,
+        totalAccommodationCost,
+        totalLifeCost,
+        totalCost
+      }
     }
   },
   actions: {
@@ -142,6 +162,7 @@ const store = new Vuex.Store({
       });
 
       commit('setCountries', countries);
+      commit('setActiveCountry', countries[0].id);
       commit('setLoading', false);
     },
     async addCountry({commit}, payload) {

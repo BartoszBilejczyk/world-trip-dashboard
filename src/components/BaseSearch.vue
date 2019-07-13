@@ -1,18 +1,19 @@
 <template>
-  <ASelect
-    :value="value"
-    style="width: 250px"
-    placeholder="Change Country"
-    @change="$emit('on-change', $event)"
-  >
-    <ASelectOption
-      v-for="option in options"
-      :value="option.value"
-      :key="option.value"
+  <div class="base-search__select">
+    <ASelect
+      :value="value"
+      placeholder="Change Country"
+      @change="$emit('on-change', $event)"
     >
-      {{ option.label }}
-    </ASelectOption>
-  </ASelect>
+      <ASelectOption
+        v-for="option in options"
+        :value="option.value"
+        :key="option.value"
+      >
+        {{ option.label }}
+      </ASelectOption>
+    </ASelect>
+  </div>
 </template>
 
 <script>
@@ -32,5 +33,7 @@
 </script>
 
 <style scoped lang="scss">
-
+  .base-search__select {
+    width: 250px;
+  }
 </style>

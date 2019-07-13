@@ -1,15 +1,32 @@
 <template lang="html">
   <div class="country-list-wrapper">
-    <div class="continents" v-if="!loading">
-      <div class="continents-images">
-        <div v-for="continent in continents" :key="continent" class="continent" :class="{ 'active': activeContinent === continent}" @click="activeContinent = continent">
-          <img :src="require(`../assets/${continent}.svg`)" class="continent-image img-responsive">
-          <span class="continent-name">{{ continent }}</span>
+    <div v-if="!loading">
+      <div class="country-list__continent-images">
+        <div
+          v-for="continent in continents"
+          :key="continent"
+          class="country-list__continent"
+          :class="{ 'active': activeContinent === continent}"
+          @click="activeContinent = continent"
+        >
+          <img
+            :src="require(`../assets/${continent}.svg`)"
+            class="country-list__continent-image img-responsive"
+          >
+          <span
+            class="country-list__continent-name">
+            {{ continent }}
+          </span>
         </div>
       </div>
     </div>
     <ul class="country-list">
-      <li class="country-name" :class="{ 'active': activeContinent === country.continent || activeContinent === 'World' }" v-for="country in countries" :key="country.name">
+      <li
+        class="country-list__name"
+        :class="{ 'active': activeContinent === country.continent || activeContinent === 'World' }"
+        v-for="country in countries"
+        :key="country.name"
+      >
         <div @click="setCountry(country.name)">
           <AIcon type="global" /> {{ country.name }}
         </div>
@@ -52,70 +69,25 @@
 </script>
 
 <style lang="scss" scoped>
-  .country-list-wrapper {
-    background: $gray;
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
+  .country-list {
+    $module: &;
 
-  .continents-images {
-    display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
-  }
-  
-  .continent {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 30px;
-    cursor: pointer;
+    justify-content: flex-end;
+    margin-top: 70px;
+    max-width: 1400px;
 
-    &.active .continent-name {
-      color: $text;
-      @include font-weight(700);
-    }
-
-    &.active .continent-image {
-      filter: contrast(1);
-      opacity: 1;
-    }
-
-    &-name {
-      @include font(20);
-      color: lighten($text, 30%);
-    }
-  }
-  
-  .continent-image {
-    filter: contrast(0);
-    opacity: 0.7;
-    max-height: 120px;
-    margin-bottom: 30px;
-    transition: 0.4s ease;
-  }
-  
-  .continent-names {
-    width: 100%;
-
-    span {
-      display: block;
-    }
-  }
-  
-  .country {
-    &-list {
-      flex-wrap: wrap;
+    &-wrapper {
+      background: $gray;
       display: flex;
-      justify-content: flex-end;
-      margin-top: 70px;
-      max-width: 1400px;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
     }
-    &-name {
+
+    &__name {
       position: relative;
       text-align: left;
       width: 14%;
@@ -147,6 +119,44 @@
         left: -20px;
         top: 50%;
         transform: translateY(-50%);
+      }
+    }
+
+    &__continent {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 30px;
+      cursor: pointer;
+
+      &.active #{$module}__continent-name {
+        color: $text;
+        @include font-weight(700);
+      }
+
+      &.active #{$module}__continent-image {
+        filter: contrast(1);
+        opacity: 1;
+      }
+
+      &-name {
+        @include font(20);
+        color: lighten($text, 30%);
+      }
+
+      &-images {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+
+      &-image {
+        filter: contrast(0);
+        opacity: 0.7;
+        max-height: 120px;
+        margin-bottom: 30px;
+        transition: 0.4s ease;
       }
     }
   }

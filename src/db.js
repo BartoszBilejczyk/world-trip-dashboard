@@ -1,6 +1,7 @@
 // Your web app's Firebase configuration
 import * as firebase from 'firebase/app'
 import 'firebase/firestore';
+import "firebase/auth";
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCBDxfiDcyQ--IRdtJ4jeUfJ2XOSdL3Ar4',
@@ -14,7 +15,7 @@ const firebaseConfig = {
 
 // Get a Firestore instance
 export const db = firebase
-  .initializeApp({ projectId: 'biley-world-trip' })
+  .initializeApp(firebaseConfig)
   .firestore();
 
 export const TimeStamp = firebase.firestore.Timestamp;

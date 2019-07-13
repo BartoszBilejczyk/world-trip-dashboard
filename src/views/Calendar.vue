@@ -1,25 +1,27 @@
 <template>
   <div class="calendar-view">
-    <calendar-view
+    <CalendarView
       :showDate="showDate"
       :events="events"
       :startingDayOfWeek="1"
       @click-event="goToCountry($event.id)"
     >
-      <calendar-view-header
+      <CalendarViewHeader
         slot="header"
         slot-scope="t"
         :header-props="t.headerProps"
         @input="handleDateChange" />
-    </calendar-view>
-    <ul class="country-list">
+    </CalendarView>
+    <ul class="calendar-view__country-list">
       <li
-        class="country-list__item"
+        class="calendar-view__country-list-item"
         v-for="country in countriesCurrentMonth"
         @click="goToCountry(country.id)"
       >
         <h2 class="heading heading--section">{{ country.name }}</h2>
-        <p class="copy copy--large">{{ moment(country.startDate).format("DD MMM YYYY") }} to {{ moment(country.endDate).format("DD MMM YYYY") }}</p>
+        <p class="copy copy--large">
+          {{ moment(country.startDate).format("DD MMM YYYY") }} to {{ moment(country.endDate).format("DD MMM YYYY") }}
+        </p>
         <div
           class="calendar-image"
           :style="{
@@ -33,12 +35,10 @@
 </template>
 
 <script>
-  import {
-    CalendarView,
-    CalendarViewHeader,
-    CalendarMathMixin,
-  } from 'vue-simple-calendar'
+  import { CalendarView, CalendarViewHeader } from 'vue-simple-calendar'
   import { mapState, mapMutations, mapGetters } from 'vuex';
+
+  import AppConfig from '../app.config';
 
   export default {
     name: 'calendar',
@@ -48,8 +48,7 @@
     },
     data() {
       return {
-        showDate: new Date('10-10-2020'),
-        weatherData: []
+        showDate: new Date(AppConfig.tripStartDate)
       }
     },
     computed: {
@@ -89,14 +88,14 @@
 </script>
 
 <style scoped lang="scss">
-  .country-list {
+  .calendar-view__country-list {
     padding-left: 80px;
     display: flex;
     flex-flow: row wrap;
     width: 700px;
     justify-content: center;
 
-    &__item {
+    &-item {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -133,7 +132,7 @@
       min-height: 600px;
       max-height: 600px;
       width: 100%;
-      max-width: 800px;
+      max-width: 650px;
       background: $gray;
       margin: 40px 0;
       background: transparent;
@@ -188,6 +187,7 @@
         flex-direction: column;
         align-items: center;
         position: relative;
+        margin-bottom: $ui-default-measure3x;
 
         * {
           background: transparent;

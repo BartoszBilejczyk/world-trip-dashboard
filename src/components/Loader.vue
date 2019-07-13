@@ -15,7 +15,7 @@
         'loader-spinner--white': props.white,
         'loader-spinner--small': props.small,
         'loader-spinner--large': props.large,
-        'loader-spinner--component': props.isComponent,
+        'loader-spinner--component': props.component,
       }]"
       v-bind="$attrs"
       class="loader-spinner"></div>

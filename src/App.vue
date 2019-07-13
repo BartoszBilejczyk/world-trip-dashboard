@@ -14,6 +14,7 @@
 
   import Navigation from '@/components/Navigation';
   import Loader from '@/components/Loader';
+  import * as firebase from 'firebase/app'
 
   export default {
     name: 'App',
@@ -24,9 +25,13 @@
     methods: {
       ...mapActions(['fetchCountries'])
     },
-
+    // async mounted() {
     mounted() {
-      this.fetchCountries();
+      // const user = await firebase.auth().currentUser;
+// console.log(user)
+//       if (user) {
+        this.fetchCountries();
+      // }
     }
   }
 </script>

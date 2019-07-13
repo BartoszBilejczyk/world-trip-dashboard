@@ -1,88 +1,117 @@
 <template>
   <div class="container">
-    <vue-frappe
-      id="totalCostData"
-      :labels="labels"
-      type="bar"
-      :height="300"
-      :colors="['#4C56C0']"
-      :dataSets="totalCostData">
-    </vue-frappe>
-    <vue-frappe
-      id="flightCostData"
-      :labels="labels"
-      type="bar"
-      :height="300"
-      :colors="['#4C56C0']"
-      :dataSets="flightCostData">
-    </vue-frappe>
-    <vue-frappe
-      id="accommodationCostData"
-      :labels="labels"
-      type="bar"
-      :height="300"
-      :colors="['#4C56C0']"
-      :dataSets="accommodationCostData">
-    </vue-frappe>
-    <vue-frappe
-      id="lifeCostData"
-      :labels="labels"
-      type="bar"
-      :height="300"
-      :colors="['#4C56C0']"
-      :dataSets="lifeCostData">
-    </vue-frappe>
+    <div class="row">
+      <div class="col-6">
+        <Chart
+          v-if="dataAvailable"
+          chart-id="totalCostData"
+          :chart-data="{ labels, datasets: totalCostData}"
+          :options="options"
+        />
+      </div>
+      <div class="col-6">
+        <Chart
+          v-if="dataAvailable"
+          chart-id="flightCostData"
+          :chart-data="{ labels, datasets: flightCostData}"
+          :options="options"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <Chart
+          v-if="dataAvailable"
+          chart-id="accommodationCostData"
+          :chart-data="{ labels, datasets: accommodationCostData}"
+          :options="options"
+        />
+      </div>
+      <div class="col-6">
+        <Chart
+          v-if="dataAvailable"
+          chart-id="lifeCostData"
+          :chart-data="{ labels, datasets: lifeCostData}"
+          :options="options"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import { Bar } from 'vue-chartjs'
+  import Chart from '../components/Chart.js'
 
   export default {
-    extends: Bar,
+    components: { Chart },
     name: 'budget',
+    data() {
+      return {
+        options: { //Chart.js options
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              },
+              gridLines: {
+                display: true
+              }
+            }],
+            xAxes: [{
+              gridLines: {
+                display: false
+              }
+            }]
+          },
+          legend: {
+            display: true
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      }
+    },
     computed: {
       ...mapGetters(['allCountriesTotalCost']),
 
       labels() {
-        return this.allCountriesTotalCost.map(item => item.name)
+        return this.allCountriesTotalCost.countries.map(item => item.name) || []
       },
       totalCostData() {
-        const values = this.allCountriesTotalCost.map(item => Number(item.totalCost));
-
         return [{
-          name: 'Total Cost',
-          chartType: 'bar',
-          values
+          label: 'Total Cost',
+          backgroundColor: '#4C56C0',
+          data: this.allCountriesTotalCost.countries.map(item => Number(item.totalCost))
         }] || []
       },
       flightCostData() {
-        const values = this.allCountriesTotalCost.map(item => Number(item.flightsCost));
-
         return [{
-          name: 'Flight Cost',
-          chartType: 'bar',
-          values
+          label: 'Flight Cost',
+          backgroundColor: '#4C56C0',
+          data: this.allCountriesTotalCost.countries.map(item => Number(item.flightsCost))
         }] || []
       },
       accommodationCostData() {
-        const values = this.allCountriesTotalCost.map(item => Number(item.accommodationCost));
-
         return [{
-          name: 'accommodation Cost',
-          chartType: 'bar',
-          values
+          label: 'Accommodation Cost',
+          backgroundColor: '#4C56C0',
+          data: this.allCountriesTotalCost.countries.map(item => Number(item.accommodationCost))
         }] || []
       },
       lifeCostData() {
-        const values = this.allCountriesTotalCost.map(item => Number(item.lifeCost));
-
         return [{
-          name: 'Life Cost',
-          chartType: 'bar',
-          values
+          label: 'Life Cost',
+          backgroundColor: '#4C56C0',
+          data: this.allCountriesTotalCost.countries.map(item => Number(item.lifeCost))
         }] || []
+      },
+      dataAvailable() {
+        return this.labels.length &&
+          this.totalCostData.length &&
+          this.flightCostData.length &&
+          this.accommodationCostData.length &&
+          this.lifeCostData.length
       }
     }
   }
