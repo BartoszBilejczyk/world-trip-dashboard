@@ -115,3 +115,8 @@
   text-orientation: upright;
 }
 
+// ant design override
+
+.ant-select-focused .ant-select-selection, .ant-select-selection:focus, .ant-select-selection:active {
+  box-shadow: none;
+}

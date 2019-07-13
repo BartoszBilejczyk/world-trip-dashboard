@@ -141,7 +141,7 @@
           totalCost: '',
           priceIndex: '',
           notes: []
-        }
+        };
 
         this.$refs.nameInput.focus();
       }

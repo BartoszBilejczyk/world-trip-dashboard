@@ -1,8 +1,9 @@
 <template>
-  <div class="navigation">
+  <div class="search">
     <BaseSearch
       :value="selectedCountry ? selectedCountry.id : ''"
       :options="countriesNames"
+      :label="label"
       @on-change="setActiveCountry"
     />
   </div>
@@ -19,6 +20,12 @@
     components: {
       BaseSearch,
       BaseButton
+    },
+    props: {
+      label: {
+        type: String,
+        default: ''
+      }
     },
     computed: {
       ...mapState(['countries']),
@@ -38,14 +45,9 @@
 </script>
 
 <style scoped lang="scss">
-  .logo {
-    max-width: 100px;
-    height: auto;
-  }
-
-  .navigation {
+  .search {
+    margin-bottom: 30px;
     display: flex;
-    justify-content: center;
-
+    justify-content: flex-end;
   }
 </style>

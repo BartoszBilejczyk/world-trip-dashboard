@@ -1,5 +1,6 @@
 <template>
   <div class="base-search__select">
+    <label>{{ label }}</label>
     <ASelect
       :value="value"
       placeholder="Change Country"
@@ -27,13 +28,34 @@
       options: {
         type: Array,
         default: () => []
+      },
+      label: {
+        type: String,
+        default: ''
       }
     }
   }
 </script>
 
-<style scoped lang="scss">
-  .base-search__select .ant-select {
-    width: 250px;
+<style lang="scss">
+  .base-search__select {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      @include font(13, 500);
+    }
+
+    .ant-select {
+      width: 250px;
+
+      &-selection {
+        background-color: transparent;
+
+        &-selected-value {
+          @include font(16, 600);
+        }
+      }
+    }
   }
 </style>

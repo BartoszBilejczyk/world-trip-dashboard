@@ -1,6 +1,8 @@
 <template>
   <div class="country">
     <div class="country__main">
+      <Search label="Choose country" />
+
       <div class="row">
         <div class="col-4">
           <div
@@ -50,9 +52,11 @@
         </div>
       </div>
     </div>
-    <div class="country__side">
-      <Search />
-      <Notes />
+    <div
+      class="country__side"
+      v-if="selectedCountry.notes.length"
+    >
+      <Notes :notes="selectedCountry.notes" />
     </div>
   </div>
 </template>
@@ -115,7 +119,7 @@
     display: flex;
 
     &__main {
-      padding: 60px;
+      padding: 20px 60px 60px;
       background: $gray;
       flex: 1;
     }
@@ -137,7 +141,7 @@
     }
 
     .row {
-      height: calc((100vh - 160px) / 2);
+      height: calc((100vh - 180px) / 2);
 
       > div {
         height: 100%;
