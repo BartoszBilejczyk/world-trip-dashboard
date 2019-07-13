@@ -76,7 +76,6 @@
       }
     },
     mounted() {
-      console.log('mounted')
       if (this.cities) {
         this.getCurrentWeather(this.cities.split(', ')[0]);
       }

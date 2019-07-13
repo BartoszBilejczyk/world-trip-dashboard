@@ -69,10 +69,11 @@ const store = new Vuex.Store({
         });
 
         return {
-          flightsCost: flightsCost.toFixed(),
-          accommodationCost: accommodationCost.toFixed(),
-          lifeCost: lifeCost.toFixed(),
-          totalCost: flightsCost + accommodationCost + lifeCost
+          flightsCost: Number(flightsCost.toFixed()),
+          accommodationCost: Number(accommodationCost.toFixed()),
+          lifeCost: Number(lifeCost.toFixed()),
+          totalCost: Number(flightsCost + accommodationCost + lifeCost),
+          priceIndex: Number(getters.selectedCountry.priceIndex)
         };
       }
     },
@@ -114,10 +115,11 @@ const store = new Vuex.Store({
 
         return {
           name: c.name,
-          flightsCost: flightsCost.toFixed(),
-          accommodationCost: accommodationCost.toFixed(),
-          lifeCost: lifeCost.toFixed(),
-          totalCost: flightsCost + accommodationCost + lifeCost
+          flightsCost: Number(flightsCost.toFixed()),
+          accommodationCost: Number(accommodationCost.toFixed()),
+          lifeCost: Number(lifeCost.toFixed()),
+          totalCost: Number(flightsCost + accommodationCost + lifeCost),
+          priceIndex: Number(c.priceIndex)
         };
       }).sort((a, b) => {
         if (a.totalCost > b.totalCost) {
