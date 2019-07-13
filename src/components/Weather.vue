@@ -19,7 +19,7 @@
       :component="true"
     >
       <ul class="weather-data" v-if="weatherData && weatherData.city && weatherData.list">
-        <h2 class="heading heading--subsection">Current weather in {{ weatherData.city.name }}, {{ weatherData.city.country }}</h2>
+        <h2 class="heading heading--subsection">Current weather in {{ weatherData.city.name }}</h2>
         <div class="weather-data__days">
           <li
             class="weather-data__item"
@@ -76,7 +76,15 @@
       }
     },
     mounted() {
+      console.log('mounted')
       if (this.cities) {
+        this.getCurrentWeather(this.cities.split(', ')[0]);
+      }
+    },
+    updated() {
+      if (this.cities && this.activeCity !== this.cities.split(', ')[0]) {
+        this.weatherData = [];
+
         this.getCurrentWeather(this.cities.split(', ')[0]);
       }
     }

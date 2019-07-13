@@ -33,7 +33,7 @@
 </script>
 
 <style scoped lang="scss">
-  .base-search__select {
+  .base-search__select .ant-select {
     width: 250px;
   }
 </style>
