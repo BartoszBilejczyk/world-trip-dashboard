@@ -36,8 +36,7 @@
       async login() {
         await firebase.auth()
           .signInWithEmailAndPassword(this.email, this.password)
-          .then((e) => {
-            console.log(e);
+          .then(() => {
             this.$router.push('/')
           })
           .catch((e) => {

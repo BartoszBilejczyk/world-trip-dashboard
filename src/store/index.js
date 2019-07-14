@@ -11,7 +11,10 @@ const store = new Vuex.Store({
     activeCountryId: '',
     countries: [],
     loading: false,
-    currentMonth: null
+    currentMonth: null,
+    user: {
+      isAdmin: false
+    }
   },
   mutations: {
     setActiveCountry(state, payload) {
@@ -40,6 +43,9 @@ const store = new Vuex.Store({
     setCurrentMonth(state, payload) {
       state.currentMonth = payload
     },
+    setCurrentUser(state, payload) {
+      state.user = payload
+    }
   },
   getters: {
     selectedCountry(state) {
@@ -173,7 +179,7 @@ const store = new Vuex.Store({
       });
     },
     async updateCountry({commit, state}, payload) {
-      await db.collection('countries').doc(state.activeCountryId).update(payload).then((doc) => {
+      await db.collection('countries').doc(state.activeCountryId).update(payload).then(() => {
         commit('updateCountry', {...payload, id: state.activeCountryId});
       })
     },
@@ -182,6 +188,10 @@ const store = new Vuex.Store({
 
       commit('removeCountry', payload);
     },
+    async addUser({commit}, {data, email}) {
+      await db.collection('users').doc(data.user.uid).set({email});
+      commit('setCurrentUser', {email});
+    }
   }
 });
 

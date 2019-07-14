@@ -20,6 +20,7 @@
 
 <script>
   import * as firebase from 'firebase/app'
+  import { mapActions } from 'vuex';
 
   import BaseButton from '@/components/BaseButton'
 
@@ -33,11 +34,14 @@
       }
     },
     methods: {
+      ...mapActions(['addUser']),
+
       async register() {
         await firebase.auth()
           .createUserWithEmailAndPassword(this.email, this.password)
-          .then((e) => {
-            console.log(e)
+          .then((data) => {
+            this.addUser({data, email: this.email});
+            this.$router.push('/login');
           })
           .catch((e) => {
             console.log(e.code, e.message)

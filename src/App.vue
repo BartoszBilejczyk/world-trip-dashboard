@@ -10,11 +10,10 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+  import { mapState } from 'vuex';
 
   import Navigation from '@/components/Navigation';
   import Loader from '@/components/Loader';
-  import * as firebase from 'firebase/app'
 
   export default {
     name: 'App',
@@ -22,17 +21,6 @@
     computed: {
       ...mapState(['loading'])
     },
-    methods: {
-      ...mapActions(['fetchCountries'])
-    },
-    // async mounted() {
-    mounted() {
-      // const user = await firebase.auth().currentUser;
-// console.log(user)
-//       if (user) {
-        this.fetchCountries();
-      // }
-    }
   }
 </script>
 

@@ -10,7 +10,11 @@ import Budget from './views/Budget.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 
-// import firebase from '@firebase/app';
+import firebase from '@firebase/app';
+import 'firebase/auth';
+import { db } from '@/db';
+
+import store from './store'
 
 Vue.use(Router);
 
@@ -29,64 +33,89 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'continents',
-      component: CountryList
+      name: 'country-list',
+      component: CountryList,
+      meta: { requiresAuth: true }
     },
     {
       path: '/country',
       name: 'country',
-      component: Country
+      component: Country,
+      meta: { requiresAuth: true }
     },
     {
       path: '/calendar',
       name: 'calendar',
-      component: Calendar
+      component: Calendar,
+      meta: { requiresAuth: true }
     },
     {
       path: '/budget',
       name: 'budget',
-      component: Budget
+      component: Budget,
+      meta: { requiresAuth: true }
     },
     {
       path: '/admin',
       name: 'admin',
-      component: Admin
+      component: Admin,
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: '/admin/new',
       name: 'admin-new',
-      component: AdminNew
+      component: AdminNew,
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: '/admin/edit',
       name: 'admin-edit',
-      component: AdminEdit
+      component: AdminEdit,
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     // instead of 404, when none of the routes are matched, redirect to home
     {
       path: '*',
-      redirect: () => '/',
+      redirect: '/login'
+    },
+    {
+      path: '/',
+      redirect: '/login'
     }
   ]
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   const avoid = ['login', 'register'];
-//
-//   firebase.auth().onAuthStateChanged(function(user) {
-//     if (avoid.some(name => name === to.name)) {
-//       console.log('elo')
-//       return next();
-//     } else if (user) {
-//       console.log('elo')
-//       console.log(from.name || from.path)
-//       next(from.name || from.path)
-//     } else {
-//       console.log('elo')
-//       next('/login')
-//     }
-//   });
-//
-// });
+const fetchCountries = () => {
+  if (!store.state.countries.length) {
+    store.dispatch('fetchCountries');
+  }
+};
 
-export default router
+router.beforeEach(async (to, from, next) => {
+  const currentUser = firebase.auth().currentUser;
+
+  if (!store.state.user.email && currentUser) {
+    await db.collection('users').doc(currentUser.uid).get().then(doc => {
+      store.commit('setCurrentUser', doc.data());
+    });
+  }
+
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+
+  if (requiresAuth && !currentUser) {
+    next('login');
+  } else if (requiresAdmin && currentUser && !store.state.user.isAdmin) {
+    fetchCountries();
+    next('/');
+  } else if (!requiresAuth && currentUser) {
+    next('/');
+  } else if (requiresAuth && currentUser) {
+    fetchCountries();
+    next();
+  } else {
+    next();
+  }
+});
+
+export default router;

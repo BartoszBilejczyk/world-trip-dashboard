@@ -54,7 +54,7 @@
     </div>
     <div
       class="country__side"
-      v-if="selectedCountry.notes.length"
+      v-if="selectedCountry.notes && selectedCountry.notes.length"
     >
       <Notes :notes="selectedCountry.notes" />
     </div>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapMutations } from 'vuex';
+  import { mapGetters } from 'vuex';
   import { CalendarView, CalendarViewHeader } from 'vue-simple-calendar';
 
   import Search from '@/components/Search';
