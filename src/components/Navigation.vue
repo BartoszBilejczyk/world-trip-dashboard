@@ -27,6 +27,8 @@
       v-if="$store.state.user.email"
       @click="logout"
       onDarkBg
+      :loading="loading"
+      full
     >
       Log out
     </BaseButton>
@@ -44,10 +46,16 @@
     components: {
       BaseButton
     },
+    data() {
+      return {
+        loading: false
+      }
+    },
     methods: {
       ...mapMutations(['setCurrentUser']),
 
       async logout() {
+        this.loading = true;
         await firebase.auth().signOut()
           .then(() => {
             this.setCurrentUser({ isAdmin: false });
@@ -56,6 +64,7 @@
           .catch((e) => {
             console.log(e.code, e.message)
           });
+        this.loading = false;
       }
     }
   }
@@ -71,7 +80,7 @@
     align-items: center;
     justify-content: space-between;
     z-index: 20;
-    padding-bottom: 40px;
+    padding: 0 10px 40px;
 
     &-content {
       padding: 40px 0;

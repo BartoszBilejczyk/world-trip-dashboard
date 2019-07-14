@@ -117,6 +117,19 @@
 
 // ant design override
 
-.ant-select-focused .ant-select-selection, .ant-select-selection:focus, .ant-select-selection:active {
+.ant-select-focused .ant-select-selection,
+.ant-select-selection:focus,
+.ant-select-selection:active,
+.ant-input:focus {
   box-shadow: none;
+}
+
+.ant-input {
+  border-color: lighten($text, 40%)
+}
+
+.ant-input:hover,
+.ant-input:focus,
+.ant-input:active {
+  border-color: $primary;
 }

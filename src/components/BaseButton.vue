@@ -8,7 +8,8 @@
       'base__btn--filled': filled,
       'base__btn--empty': empty,
       'base__btn--warning': warning,
-      'base__btn--circle': circle
+      'base__btn--circle': circle,
+      'base__btn--full': full
     }"
     v-bind="$attrs"
     :disable-ripple="true"
@@ -23,7 +24,12 @@
       class="base__btn-content"
       data-cypress="base__btn-content"
     >
-      <LoaderButton :white="whiteLoader"></LoaderButton>
+      <LoaderButton
+        :white="whiteLoader"
+        :loading="loading"
+        :component="true"
+        :small="true"
+      ></LoaderButton>
     </div>
     <div
       v-else
@@ -63,6 +69,10 @@
         default: false
       },
       filled: {
+        type: Boolean,
+        default: false
+      },
+      full: {
         type: Boolean,
         default: false
       },
@@ -150,6 +160,7 @@
   // End of override
 
   .base__btn {
+    position: relative;
     display: block;
     background-color: transparent;
     border: 1px solid $primary;
@@ -161,7 +172,7 @@
     @include font(14, 600);
     text-transform: none;
     transition: 0.1s ease;
-    border-radius: $ui-default-measure;
+    border-radius: $ui-default-measure2x;
     cursor: pointer;
     white-space: nowrap;
     height: 30px;
@@ -189,11 +200,16 @@
     &-content {
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     &:active,
     &:focus {
       outline: none;
+    }
+
+    &--full {
+      width: 100%;
     }
   }
 
