@@ -32,10 +32,21 @@
       ...mapGetters(['selectedCountry']),
 
       countriesNames() {
-        return this.countries.map(o => ({
-          label: o.name,
-          value: o.id
-        }));
+        return this.countries
+          .sort((a, b) => {
+            if (a.name > b.name) {
+              return 1;
+            }
+            if (b.name > a.name) {
+              return -1;
+            }
+            return 0;
+          })
+          .map(o => ({
+            label: o.name,
+            value: o.id
+          })
+        );
       }
     },
     methods: {

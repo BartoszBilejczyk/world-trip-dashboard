@@ -83,7 +83,7 @@
 
         <div class="notes">
           <div class="notes-item" v-for="(note, index) in selectedCountry.notes" :key="index">
-            <ATextarea v-model="note.note" :rows="5"></ATextarea>
+            <ATextarea v-model="note.note" :rows="15"></ATextarea>
           </div>
         </div>
 
@@ -171,10 +171,27 @@
 <style scoped lang="scss">
   .admin-edit {
     overflow-y: auto;
+    padding-bottom: 100px;
+    margin: 0 auto;
+    width: 100%;
+
+    @include sm-up {
+      max-width: 600px;
+      padding: 20px 0;
+    }
   }
 
   .flights-item,
   .accommodation-item {
     margin-bottom: 20px;
+  }
+
+  .edited-country,
+  .remove {
+    margin-top: 10px;
+
+    > * {
+      margin: 5px 0;
+    }
   }
 </style>

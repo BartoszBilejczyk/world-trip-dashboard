@@ -150,5 +150,16 @@
 </script>
 
 <style scoped lang="scss">
+  .admin-new {
+    margin: 0 auto;
+    width: 100%;
 
+    @include sm-up {
+      width: 700px;
+    }
+
+    .container > * {
+      margin: 5px 0;
+    }
+  }
 </style>
