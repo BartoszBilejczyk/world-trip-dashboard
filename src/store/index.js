@@ -97,7 +97,17 @@ const store = new Vuex.Store({
       });
     },
     allCountriesTotalCost(state) {
-      const countries = state.countries.map(c => {
+      const countriesByDate = state.countries.sort((a, b) => {
+        if (a.startDate > b.startDate) {
+          return 1;
+        }
+        if (b.startDate > a.startDate) {
+          return -1;
+        }
+        return 0;
+      });
+
+      const countries = countriesByDate.map(c => {
         let flightsCost = 0;
         let accommodationCost = 0;
         let lifeCost = 0;
@@ -127,14 +137,6 @@ const store = new Vuex.Store({
           totalCost: Number(flightsCost + accommodationCost + lifeCost),
           priceIndex: Number(c.priceIndex)
         };
-      }).sort((a, b) => {
-        if (a.totalCost > b.totalCost) {
-          return 1;
-        }
-        if (b.totalCost > a.totalCost) {
-          return -1;
-        }
-        return 0;
       });
 
       let totalFlightsCost = 0;

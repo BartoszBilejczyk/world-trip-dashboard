@@ -25,8 +25,16 @@ $gutter2x: 2 * $gutter;
   }
 }
 
+.row.row--wrap {
+  flex-wrap: wrap;
+}
+
 .row [class^="col"] {
-  margin: 0 $gutter;
+  margin: $gutter 0;
+
+  @include sm-up {
+    margin: 0 $gutter;
+  }
 }
 
 .row [class^="col"]:first-of-type {
@@ -102,5 +110,90 @@ $gutter2x: 2 * $gutter;
   max-width: 100%;
   min-width: 100%;
   flex: 12;
+}
+
+.col-sm-1 {
+  @include sm-down {
+    max-width: calc(100% / 12 - 15px);
+    min-width: calc((100% / 12) - #{$gutter2x});
+    flex: 1;
+  }
+}
+.col-sm-2 {
+  @include sm-down {
+    max-width: calc(100% / 6 - 15px);
+    min-width: calc((100% / 6) - #{$gutter2x});
+    flex: 2;
+  }
+}
+.col-sm-3 {
+  @include sm-down {
+    max-width: calc(100% / 4 - 15px);
+    min-width: calc((100% / 4) - #{$gutter2x});
+    flex: 3;
+  }
+}
+.col-sm-4 {
+  @include sm-down {
+    max-width: calc(100% / 3 - 15px);
+    min-width: calc((100% / 3) - #{$gutter2x});
+    flex: 4;
+  }
+}
+.col-sm-5 {
+  @include sm-down {
+    max-width: calc(100% / (12 / 5) - 15px);
+    min-width: calc((100% / (12 / 5)) - #{$gutter2x});
+    flex: 5;
+  }
+}
+.col-sm-6 {
+  @include sm-down {
+    max-width: calc(100% / 2 - 15px);
+    min-width: calc((100% / 2) - #{$gutter2x});
+    flex: 6;
+  }
+}
+.col-sm-7 {
+  @include sm-down {
+    max-width: calc(100% / (12 / 7) - 15px);
+    min-width: calc((100% / (12 / 7)) - #{$gutter2x});
+    flex: 7;
+  }
+}
+.col-sm-8 {
+  @include sm-down {
+    max-width: calc(100% / (12 / 8) - 15px);
+    min-width: calc((100% / (12 / 8)) - #{$gutter2x});
+    flex: 8;
+  }
+}
+.col-sm-9 {
+  @include sm-down {
+    max-width: calc(100% / (12 / 9) - 15px);
+    min-width: calc((100% / (12 / 9)) - #{$gutter2x});
+    flex: 9;
+  }
+}
+.col-sm-10 {
+  @include sm-down {
+    max-width: calc(100% / (12 / 10) - 15px);
+    min-width: calc((100% / (12 / 10)) - #{$gutter2x});
+    flex: 10;
+  }
+}
+.col-sm-11 {
+  @include sm-down {
+    max-width: calc(100% / (12 / 11) - 15px);
+    min-width: calc((100% / (12 / 11)) - #{$gutter2x});
+    flex: 11;
+  }
+}
+.col-sm-12 {
+  @include sm-down {
+    max-width: 100%;
+    min-width: 100%;
+    flex: 12;
+  }
 }
 

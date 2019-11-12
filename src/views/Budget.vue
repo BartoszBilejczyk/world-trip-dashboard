@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="charts">
-      <div class="row">
-        <div class="col-6">
+      <div class="row row--wrap">
+        <div class="col-sm-12 col-6">
           <Chart
             v-if="dataAvailable"
             class="chart"
@@ -11,7 +11,7 @@
             :options="options"
           />
         </div>
-        <div class="col-6">
+        <div class="col-sm-12 col-6">
           <Chart
             v-if="dataAvailable"
             class="chart"
@@ -21,8 +21,8 @@
           />
         </div>
       </div>
-      <div class="row">
-        <div class="col-6">
+      <div class="row row--wrap">
+        <div class="col-sm-12 col-6">
           <Chart
             v-if="dataAvailable"
             class="chart"
@@ -31,7 +31,7 @@
             :options="options"
           />
         </div>
-        <div class="col-6">
+        <div class="col-sm-12 col-6">
           <Chart
             v-if="dataAvailable"
             class="chart"
@@ -41,8 +41,8 @@
           />
         </div>
       </div>
-      <div class="row">
-        <div class="col-6">
+      <div class="row row--wrap">
+        <div class="col-sm-12 col-6">
           <Chart
             v-if="dataAvailable"
             class="chart"
@@ -51,7 +51,7 @@
             :options="options"
           />
         </div>
-        <div class="col-6">
+        <div class="col-sm-12 col-6">
           <Chart
             v-if="dataAvailable"
             class="chart"
@@ -173,6 +173,11 @@
     justify-content: center;
     flex-direction: column;
     flex: 1;
+    padding-bottom: 100px;
+
+    @include sm-up {
+      padding-bottom: 0;
+    }
   }
 
   .chart,

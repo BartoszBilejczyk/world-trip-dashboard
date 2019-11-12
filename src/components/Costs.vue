@@ -49,12 +49,9 @@
   .costs__item {
     display: flex;
     justify-content: space-between;
-  }
 
-  .costs__budget {
-    width: 160px;
-    height: 160px;
-    display: flex;
-    align-items: center;
+    > span:first-of-type {
+      padding-right: 8px;
+    }
   }
 </style>

@@ -3,15 +3,14 @@
     <div class="weather-header">
       <h2 class="heading heading--section">Weather</h2>
       <div>
-      <span v-for="city in cities.split(', ')">
        <span
+         v-for="city in cities.split(', ')"
          class="city"
          :class="{'city--active': city === activeCity}"
          @click="getCurrentWeather(city)"
        >
          {{ city }}
-       </span>
-      </span>
+        </span>
       </div>
     </div>
     <Loader
@@ -20,8 +19,8 @@
     >
       <ul class="weather-data" v-if="weatherData && weatherData.city && weatherData.list">
         <h2 class="heading heading--subsection">Current weather in {{ weatherData.city.name }}</h2>
-        <div class="weather-data__days">
-          <li
+        <li class="weather-data__days">
+          <div
             class="weather-data__item"
             v-for="(weather, index) in weatherData.list.slice(0,5)"
             :key="index"
@@ -33,8 +32,8 @@
             </div>
             <!--<span class="day">{{ moment(week[index]).format('ddd') }}</span>-->
             <img class="weather-type" src="" alt="">
-          </li>
-        </div>
+          </div>
+        </li>
       </ul>
     </Loader>
   </div>
@@ -65,6 +64,7 @@
     },
     methods: {
       async getCurrentWeather(city) {
+        console.log(city)
         this.loading = true;
         this.activeCity = city;
 
@@ -80,13 +80,13 @@
         this.getCurrentWeather(this.cities.split(', ')[0]);
       }
     },
-    updated() {
-      if (this.cities && this.activeCity !== this.cities.split(', ')[0]) {
-        this.weatherData = [];
-
-        this.getCurrentWeather(this.cities.split(', ')[0]);
-      }
-    }
+    // updated() {
+    //   if (this.cities && this.activeCity !== this.cities.split(', ')[0]) {
+    //     this.weatherData = [];
+    //
+    //     this.getCurrentWeather(this.cities.split(', ')[0]);
+    //   }
+    // }
   }
 </script>
 

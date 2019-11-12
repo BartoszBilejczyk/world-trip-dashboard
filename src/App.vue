@@ -3,7 +3,7 @@
     <Navigation />
     <div class="main">
       <Loader :loading="loading">
-        <router-view/>
+        <router-view v-if="!loading" />
       </Loader>
     </div>
   </div>
@@ -26,16 +26,26 @@
 
 <style lang="scss">
   #app {
-    overflow: hidden;
-    height: 100vh;
-    max-height: 100vh;
     display: flex;
+    max-width: 100vw;
+
+    @include sm-up {
+      height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
+    }
   }
 
   .main {
-    width: calc(100vw - 100px);
+    min-height: calc(100vh - 100px);
+    width: 100vw;
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    @include sm-up {
+      min-height: 100vh;
+      width: calc(100vw - 100px);
+    }
   }
 </style>

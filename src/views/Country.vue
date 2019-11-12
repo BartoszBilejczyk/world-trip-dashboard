@@ -3,8 +3,8 @@
     <div class="country__main">
       <Search label="Choose country" />
 
-      <div class="row">
-        <div class="col-4">
+      <div class="row row--wrap">
+        <div class="col-sm-12 col-4">
           <div
             class="base-box country__background"
             :style="{ backgroundImage: selectedCountry.name && 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(' + require(`../static/backgrounds/${selectedCountry.name.toLowerCase().split(' ').join('')}_background.jpg`) + ')' }"
@@ -12,7 +12,7 @@
             <CountryMainInfo :country="selectedCountry" />
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-sm-12 col-4">
           <div class="base-box">
             <CalendarView
               :showDate="events[0].startDate"
@@ -28,24 +28,24 @@
             </CalendarView>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-sm-12 col-4">
           <div class="base-box">
             <Weather :cities="selectedCountry.cities" />
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-5">
+      <div class="row row--wrap">
+        <div class="col-sm-12 col-5">
           <div class="base-box">
             <FlightList :flights="selectedCountry.flights" />
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-sm-12 col-4">
           <div class="base-box">
             <AccommodationList :accommodation="selectedCountry.accommodation" />
           </div>
         </div>
-        <div class="col-3">
+        <div class="col-sm-12 col-3">
           <div class="base-box">
             <Costs :country="selectedCountry" />
           </div>
@@ -107,7 +107,7 @@
     },
     methods: {
       setDateToShow(d) {
-        this.showDate = d;
+        this.showDate = new Date(d);
       }
     }
   }
@@ -115,8 +115,15 @@
 
 <style scoped lang="scss">
   .country {
-    height: 100vh;
     display: flex;
+    flex-direction: column;
+    padding-bottom: 100px;
+
+    @include sm-up {
+      height: 100vh;
+      flex-direction: row;
+      padding-bottom: 0;
+    }
 
     &__main {
       padding: 20px 60px 60px;
@@ -134,14 +141,19 @@
     }
 
     &__side {
-      width: 350px;
       box-shadow: 0 0 20px 10px rgba(0,0,0,0.03);
       z-index: 20;
       padding: 60px 45px;
+
+      @include sm-up {
+        width: 350px;
+      }
     }
 
     .row {
-      height: calc((100vh - 180px) / 2);
+      @include sm-up {
+        height: calc((100vh - 180px) / 2);
+      }
 
       > div {
         height: 100%;

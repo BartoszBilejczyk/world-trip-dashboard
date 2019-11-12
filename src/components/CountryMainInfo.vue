@@ -15,7 +15,7 @@
     </p>
     <hr class="divider divider--white"/>
     <p class="copy copy--color-white">
-      Total cost: {{ country.totalCost }}
+      Total cost: {{ selectedCountryTotalCost.totalCost }}
     </p>
     <hr class="divider divider--white"/>
     <p class="copy copy--color-white">
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'country-main-info',
     props: {
@@ -32,6 +34,9 @@
         type: Object,
         default: () => {}
       }
+    },
+    computed: {
+      ...mapGetters(['selectedCountryTotalCost'])
     }
   }
 </script>

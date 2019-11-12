@@ -67,7 +67,7 @@
       }
     },
     mounted() {
-      this.setCurrentMonth(this.showDate);
+      this.setCurrentMonth(new Date(this.showDate));
     },
     methods: {
       ...mapMutations(['setActiveCountry', 'setCurrentMonth']),
@@ -81,7 +81,7 @@
       },
       handleDateChange(d) {
         this.showDate = d;
-        this.setCurrentMonth(this.showDate);
+        this.setCurrentMonth(new Date(this.showDate));
       }
     }
   }
@@ -89,20 +89,31 @@
 
 <style scoped lang="scss">
   .calendar-view__country-list {
-    padding-left: 80px;
     display: flex;
     flex-flow: row wrap;
-    width: 700px;
+    max-width: 700px;
+    margin: 0 auto;
     justify-content: center;
+
+    @include sm-up {
+      margin: 0;
+      padding-left: 80px;
+    }
 
     &-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: calc(50% - 20px);
       margin: 20px 10px;
+      padding: 0 20px;
       cursor: pointer;
+      width: 100%;
+
+      @include sm-up {
+        width: calc(50% - 20px);
+        padding: 0;
+      }
     }
   }
 
@@ -119,25 +130,39 @@
 
 <style lang="scss">
   .calendar-view {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 8%;
+    padding-bottom: 100px;
+
+    @include sm-up {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8%;
+    }
 
     .cv-wrapper {
       display: block;
       height: auto;
-      min-height: 600px;
-      max-height: 600px;
+      min-height: 530px;
+      max-height: 530px;
       width: 100%;
+      margin: 40px auto;
+      padding: 0 20px;
       max-width: 650px;
       background: $gray;
-      margin: 40px 0;
       background: transparent;
       align-items: center;
       vertical-align: middle;
+
+
+      @include sm-up {
+        min-height: 600px;
+        max-height: 600px;
+        justify-content: flex-start;
+        margin: 40px 0;
+        padding: 0;
+      }
 
       .cv-header-days {
         margin-bottom: $ui-default-measure3x;
@@ -193,12 +218,12 @@
           background: transparent;
           border: none;
         }
-        
+
         &-nav {
           position: absolute;
         }
       }
-      
+
 
       .periodLabel {
         justify-content: center;
