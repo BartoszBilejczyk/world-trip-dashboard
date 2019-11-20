@@ -64,7 +64,6 @@
     },
     methods: {
       async getCurrentWeather(city) {
-        console.log(city)
         this.loading = true;
         this.activeCity = city;
 
@@ -80,13 +79,11 @@
         this.getCurrentWeather(this.cities.split(', ')[0]);
       }
     },
-    // updated() {
-    //   if (this.cities && this.activeCity !== this.cities.split(', ')[0]) {
-    //     this.weatherData = [];
-    //
-    //     this.getCurrentWeather(this.cities.split(', ')[0]);
-    //   }
-    // }
+    watch: {
+      cities() {
+        this.getCurrentWeather(this.cities.split(', ')[0]);
+      }
+    }
   }
 </script>
 

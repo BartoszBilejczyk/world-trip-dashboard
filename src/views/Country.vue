@@ -117,10 +117,12 @@
   .country {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     padding-bottom: 100px;
+    overflow-y: auto;
 
     @include sm-up {
-      height: 100vh;
+      min-height: 100vh;
       flex-direction: row;
       padding-bottom: 0;
     }
@@ -141,18 +143,20 @@
     }
 
     &__side {
-      box-shadow: 0 0 20px 10px rgba(0,0,0,0.03);
       z-index: 20;
       padding: 60px 45px;
 
       @include sm-up {
+        max-width: 350px;
         width: 350px;
+        flex: 1;
       }
     }
 
     .row {
       @include sm-up {
-        height: calc((100vh - 180px) / 2);
+        height: 370px;
+        min-height: calc((100vh - 180px) / 2);
       }
 
       > div {

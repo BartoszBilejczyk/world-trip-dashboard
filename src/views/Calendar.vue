@@ -231,6 +231,7 @@
       }
 
       .cv-event {
+        cursor: pointer;
         background: $primary;
         color: white;
         border: 2px solid $primary;
